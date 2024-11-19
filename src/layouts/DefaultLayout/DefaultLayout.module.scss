@@ -1,0 +1,32 @@
+.wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    overflow-x: hidden;
+    user-select: none;
+}
+
+.container{
+    position: relative;
+    font-size: 14px;
+    line-height: 1.4rem;
+    background-color: #fff;
+
+    @media (min-width: 1200px) {
+        width: 1170px;
+    }
+
+    @media (min-width: 992px) and (max-width: 1199px) {
+        width: 970px;
+    }
+
+    @media (min-width: 768px) and (max-width: 991px) {
+        width: 750px;
+    }
+
+    @media (max-width: 767px) {
+        width: 100%;
+    }
+}

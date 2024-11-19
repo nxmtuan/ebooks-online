@@ -1,0 +1,246 @@
+.wrapper{
+    flex: 1;
+    margin-right: auto;
+    margin-left: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+@media screen and (max-width: 767px) {
+    .container{
+        width: 750px;
+    }
+
+    .block-content{
+        padding: 0 45px;
+    }
+
+    .trending-book, .popular{
+        .block-content{
+            padding: 0 0px;
+        }
+    }
+
+    .bottom-content {
+        padding: 12px 0 35px;
+        margin: 12px 0 20px;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 991px) {
+    .container{
+        width: 970px;
+    }
+
+    .block-content{
+        padding: 0 10px;
+    }
+
+    .bottom-content {
+        padding: 12px 0 40px;
+        margin: 12px 0 25px;
+    }
+}
+
+@media screen and (min-width: 992px) and (max-width: 1199px) {
+    .block-content{
+        padding: 0px;
+    }
+
+    .bottom-content {
+        padding: 17px 0 45px;
+        margin: 17px 0 30px;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .container{
+        width: 1170px;
+    }
+
+    .bottom-content {
+        padding: 22px 0 50px;
+        margin: 22px 0 30px;
+    }
+}
+
+.container{
+    width: 100%;
+    height: auto;
+}
+
+//top content
+.top-content-container, .middle-content-container, .bottom-content-container{
+    .row{
+        margin-left: -15px;
+        margin-right: -15px;
+    }
+}
+
+.block-header{
+    display: flex;
+    -webkit-box-direction: normal;
+    -webkit-box-orient: horizontal;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-box-align: baseline;
+    -ms-flex-align: baseline;
+    align-items: baseline;
+
+    h2{
+        font-family: var(--font-family-CenturyGothic);
+        color: #616161;
+        font-weight: 700;
+        font-size: 20px;
+        text-transform: uppercase;
+        margin-bottom: 25px;
+        margin-top: 20px;
+        line-height: 1.1;
+    }
+
+    a{
+        margin-left: 1em;
+        font-size: 16px;
+        color: #17a288;
+    }
+}
+
+.block-content{
+    margin-bottom: 0;
+    overflow-x: hidden;
+}
+
+.list-content{
+    display: flex;
+    width: 100%;
+    //z-index: 1;
+    -webkit-tap-highlight-color: transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.items-card{
+    width: 178px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    min-height: 1px;
+    float: left;
+    position: relative;
+}
+
+.items{
+    display: block;
+    width: 100%;
+}
+
+.book-image{
+    position: relative;
+    width: 100%;
+    height: 267px;
+    background-color: black;
+    cursor: pointer;
+}
+
+.book-info{
+    font-weight: var(--font-family-helvetica);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.book-title{
+    width: 100%;
+    height: 50px;
+    z-index: 2;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    
+    .title{
+        font-size: 15px;
+        line-height: 1.2;
+        display: block;
+        color: #000;
+        margin: 10px 0;
+    }
+}
+
+.book-author{
+    width: 100%;
+    height: 20px;
+    margin-bottom: 5px;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+
+    .author{
+        font-size: 14px;
+        color: #777777;
+    }
+}
+
+.price{
+    color: #d9534f;
+    font-size: 15px;
+    width: auto;
+    display: flex;
+    
+    .sale{
+        font-size: 24px;
+        padding-right: 10px;
+    }
+
+    .no-sale{
+        color: #777777;
+        text-decoration: line-through;
+    }
+}
+
+//middle content
+.trending-book, .popular{
+    margin-top: 30px;
+    
+    .list-content{
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+    }
+    
+    .items-card{
+        box-sizing: content-box;
+        margin: 0px;
+        padding: 7px 14px 7px 0;
+    }
+
+
+}
+
+.bottom-content{
+    .region-bottom{
+        width: 100%;
+        position: relative;
+        min-height: 1px;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .items-card{
+        width: 560px;
+        
+        .blog-image{
+            width: 560px;
+            height: 315px;
+            position: relative;
+            cursor: pointer;
+    
+            img{
+                object-fit: cover;
+            }
+        }
+    }
+
+}
+
+
+

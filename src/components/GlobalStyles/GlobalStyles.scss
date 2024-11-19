@@ -1,0 +1,76 @@
+@import 'normalize.css';
+
+:root {
+    --primary: linear-gradient(to right, #FF7854 0%, #FF5079 100%);
+    --primary-backup: webkit-gradient(linear, left top, right top, from(#FF7854), to(#FF5079));
+
+    //fonts
+    --font-family-CenturyGothic: 'CenturyGothic', san-serif;
+    --font-family-helvetica: 'helvetica', san-serif;
+    --font-family-glyphicons-halflings: 'glyphicons-halflings', san-serif;
+    --font-family-l7gfbjR61M69yt8Z2QKtlA: 'l7gfbjR61M69yt8Z2QKtlA', san-serif;
+}
+
+body{
+    font-family: var(--font-family-helvetica);
+    color: #333;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+a{
+    text-decoration: none;
+    cursor: pointer;
+
+    &:hover{
+        text-decoration: underline;
+    }
+}
+
+ul {
+    list-style: none;
+}
+
+img{
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    object-fit: fill;
+}
+
+//Fonts emmbeded
+@font-face {
+    font-family: CenturyGothic;
+    src: url('/assets/fonts/CenturyGothicRegular.ttf');
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: CenturyGothic;
+    src: url('/assets/fonts/CenturyGothicRegularBold.ttf');
+    font-weight: 700;
+}
+
+@font-face {
+    font-family: helvetica;
+    src: url('/assets/fonts/helvetica.ttf');
+    font-weight: 600;
+}
+
+@font-face {
+    font-family: glyphicons-halflings;
+    src: url('/assets/fonts/glyphicons-halflings-regular.woff2');
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: l7gfbjR61M69yt8Z2QKtlA;
+    src: url('/assets/fonts/l7gfbjR61M69yt8Z2QKtlA.woff2');
+    font-weight: 400;
+}

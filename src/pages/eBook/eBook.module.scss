@@ -1,0 +1,149 @@
+.wrapper {
+    margin-right: auto;
+    margin-left: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+@media screen and (min-width: 1200px) {
+    .container {
+        width: 1170px;
+    }
+}
+@media screen and (min-width: 768px) and (max-width: 992px) {
+    .container {
+        width: 970px;
+    }
+}
+@media screen and (max-width: 767px) {
+    .container {
+        width: 750px;
+    }
+
+    .left-region{
+        text-align: center;
+    }
+}
+
+.row {
+    margin-left: -15px;
+    margin-right: -15px;
+}
+
+.top-content{
+    margin-top: 50px;
+}
+
+.container{
+    margin-right: auto;
+    margin-left: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.left-region{
+    width: 195px;
+    height: 559px;
+    position: relative;
+    min-height: 1px;
+    padding: 0 15px 0 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+    
+}
+
+.book-image-region{
+    display: grid;
+    place-items: center;
+    width: 165px;
+    height: 298px;
+    padding-bottom: 15px;
+    
+}
+
+.book-image {
+    position: relative;
+    width: 100%;
+    height: 247px;
+    margin-bottom: 10px;
+}
+
+.info-region {
+    font-family: var(--font-family-CenturyGothic);
+    width: 100%;
+    height: auto;
+    
+    h2{
+        display: flex;
+        font-weight: 400;
+        font-size: 14px;
+        text-transform: uppercase;
+        line-height: 2.1;
+        color: #616161;
+    }
+
+    p{
+        font-family: var(--font-family-helvetica);
+        margin-left: 5px;
+        color: black;
+    }
+}
+
+.published-year {
+
+}
+
+.pages-count {
+
+}
+
+.download-count {
+
+}
+
+.share-option {
+    margin-bottom: 30px;
+
+    h2{
+        //font-family: var(--font-family-CenturyGothic);
+        font-size: 14px;
+        line-height: 1.75;
+        font-weight: 700;
+        margin: 0 0 15px;
+        text-transform: none;
+        color: #616161;
+    }
+}
+
+.save-favorite {
+    position: relative;
+    width: 100%;
+    height: 50px;
+    margin: 15px 0;
+
+    a{
+        position: absolute;
+        bottom: 0;
+        color: #616161;
+        font-family: var(--font-family-helvetica);
+        font-size: 14px;
+        text-decoration: underline;
+    }
+}
+
+.icon{
+    width: 34px;
+    height: 34px;
+}
+
+.fb{
+    color: #0866ff;
+}
+.x{
+    color: black;
+}
+.gplus{
+    color: #d64135;
+}
+
+
