@@ -1,14 +1,21 @@
 @import 'normalize.css';
 
 :root {
-    --primary: linear-gradient(to right, #FF7854 0%, #FF5079 100%);
-    --primary-backup: webkit-gradient(linear, left top, right top, from(#FF7854), to(#FF5079));
+    --primary-color: #17a288;
+    --secondary-color: #616161;
+    --primary-text-color: #6B6B6F;
+    --header-color: linear-gradient(to right, #FF7854 0%, #FF5079 100%);
+    --header-color-backup: webkit-gradient(linear, left top, right top, from(#FF7854), to(#FF5079));
 
     //fonts
     --font-family-CenturyGothic: 'CenturyGothic', san-serif;
     --font-family-helvetica: 'helvetica', san-serif;
     --font-family-glyphicons-halflings: 'glyphicons-halflings', san-serif;
     --font-family-l7gfbjR61M69yt8Z2QKtlA: 'l7gfbjR61M69yt8Z2QKtlA', san-serif;
+
+    //image
+    --star-image: url('../../assets/images/star.png');
+    --dstar-image: url('../../assets/images/dstar.png');
 }
 
 body{

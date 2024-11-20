@@ -92,7 +92,7 @@
 
     h2{
         font-family: var(--font-family-CenturyGothic);
-        color: #616161;
+        color: var(--secondary-color);
         font-weight: 700;
         font-size: 20px;
         text-transform: uppercase;
@@ -104,7 +104,7 @@
     a{
         margin-left: 1em;
         font-size: 16px;
-        color: #17a288;
+        color: var(--primary-color);
     }
 }
 
