@@ -70,6 +70,7 @@
     width: 100%;
     height: 247px;
     margin-bottom: 10px;
+    box-shadow: 0 10px 7px rgba(0, 0, 0, 0.3);
 }
 
 .info-region {
@@ -231,7 +232,7 @@
             background-color: var(--primary-color);
         }
     
-        a{
+        .a, a{
             padding: 12px 0;
             font-size: 20px;
             font-weight: 700;
@@ -256,6 +257,7 @@
             justify-content: center;
             align-items: center;
             border: solid 2px var(--secondary-color);
+            text-decoration: none;
             
             p{
                 text-align: center;
@@ -290,7 +292,8 @@
     }
 
     .genre-btn{
-        width: 70px;
+        display: inline-block;
+        width: auto;
         height: 33px;
         margin: 10px;
         padding: 1px 10px;
@@ -465,11 +468,12 @@
         justify-content: center;
         gap: 5px;
 
-        .star{
-            margin: 0;
-            background: var(--dstar-image) no-repeat;
-            background-size: 25px;
-        }
+    }
+
+    .star{
+        margin: 0;
+        background: var(--dstar-image) no-repeat;
+        background-size: 25px;
     }
 }
 
@@ -482,6 +486,50 @@
 .rate-message{
     font-size: 25px;
     padding: 15px 0 25px;
+}
+
+.bottom-region{
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 30px;
+    width: 100%;
+    
+}
+
+.review-btn{
+    display: flex;
+    justify-content: center;
+    width: 50%;
+    
+    .btn{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 300px;
+        height: 70px;
+        background-color: var(--primary-color);
+        font-size: 25px;
+        color: #ffffff;
+
+        &:hover{
+            background-color: #15917a;
+        }
+    }
+
+}
+
+.comments-area{
+    width: 100%;
+    height: 75px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: solid 2px #a39b9b;
+
+    p{
+        font-size: 20px;
+        color: #a39b9b;
+    }
 }
 
 

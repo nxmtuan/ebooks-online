@@ -1,15 +1,22 @@
 import classNames from 'classnames/bind';
 import styles from './Home.module.scss';
 import { Link } from 'react-router-dom';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+
+import * as getEBookService from '~/services/getEBookService';
 
 const cx = classNames.bind(styles);
+//const shuffleArray = (array) => array.sort(() => Math.random() - 0.5)
 
 function Home() {
     const rowRef1 = useRef(null);
     const rowRef2 = useRef(null);
     const rowRef3 = useRef(null);
 
+    const [listResult, setListResult] = useState([]);
+    const [editorChoiceListResult, setEditorChoiceListResult] = useState([]);
+
+    //drag to scroll event
     const applyDragScroll = (rowRef) => {
         const row = rowRef.current;
         if (!row) return;
@@ -61,6 +68,41 @@ function Home() {
         };
     }, []);
 
+    //Fetch Api
+    useEffect(() => {
+        const fetchApi = async () => {
+            try {
+                const result = await getEBookService.getListLimit();
+                //const randomBooks = shuffleArray(result)
+
+                const editorChoice = await getEBookService.getEBookByEditorChoice();
+                //const randomEditorChoice = shuffleArray(editorChoice)
+
+                setEditorChoiceListResult(editorChoice);
+                setListResult(result);
+            } catch (error) {
+                console.error('Error fetching data: ', error);
+            }
+        };
+
+        fetchApi();
+    }, []);
+
+    const handleCountView = (id) => {
+        const fetchApi = async () => {
+            try {
+                const result = await getEBookService.getEBookById(`${id}`);
+
+                const updatedViewCount = result.view_count + 1;
+                await getEBookService.updateEBook(`${id}`, { view_count: updatedViewCount });
+            } catch (error) {
+                console.log('Error fetching data: ', error);
+            }
+        };
+
+        fetchApi();
+    };
+
     return (
         <div className={cx('wrapper')}>
             {/* Top content */}
@@ -73,7 +115,8 @@ function Home() {
                         </div>
 
                         <div className={cx('block-content')}>
-                            <div className={cx('list-content')} ref={rowRef1}>
+                            <div className={cx('list-content')} ref={rowRef2}>
+
                                 <div className={cx('items-card')}>
                                     <div className={cx('items')}>
                                         <div className={cx('book-image')}>
@@ -83,7 +126,6 @@ function Home() {
                                                 loading="lazy"
                                                 draggable="false"
                                             />
-                                            
                                         </div>
 
                                         <div className={cx('book-info')}>
@@ -126,28 +168,38 @@ function Home() {
                             </div>
 
                             <div className={cx('block-content')}>
-                                <div className={cx('list-content')} ref={rowRef2}>
-                                    <div className={cx('items-card')}>
-                                        <div className={cx('items')}>
-                                            <div className={cx('book-image')}>
-                                                <img
-                                                    src="https://placehold.co/178x267.png"
-                                                    alt=""
-                                                    loading="lazy"
-                                                    draggable="false"
-                                                />
-                                                
-                                            </div>
+                                <div className={cx('list-content')} ref={rowRef1}>
+                                    {editorChoiceListResult && editorChoiceListResult.length > 0 ? (
+                                        editorChoiceListResult.map((result) => (
+                                            <div className={cx('items-card')}>
+                                                <div className={cx('items')}>
+                                                    <div className={cx('book-image')}>
+                                                        <img
+                                                            src={result.formats['image/jpeg']}
+                                                            alt={result.title || 'Book cover'}
+                                                            loading="lazy"
+                                                            draggable="false"
+                                                        />
+                                                    </div>
 
-                                            <div className={cx('book-info')}>
-                                                <div className={cx('book-title')}>
-                                                    <Link to="/" className={cx('title')}>
-                                                        How To Self-Learn With Any Schedule
-                                                    </Link>
+                                                    <div className={cx('book-info')}>
+                                                        <div className={cx('book-title')}>
+                                                            <Link
+                                                                onClick={() => handleCountView(result.id)}
+                                                                to={{ pathname: `/ebook/${result.id}` }}
+                                                                className={cx('title')}
+                                                                state={{ data: result }}
+                                                            >
+                                                                {result.title || 'Unknow Title'}
+                                                            </Link>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
+                                        ))
+                                    ) : (
+                                        <p>No books available</p>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -170,29 +222,6 @@ function Home() {
                                                     loading="lazy"
                                                     draggable="false"
                                                 />
-                                                
-                                            </div>
-
-                                            <div className={cx('book-info')}>
-                                                <div className={cx('book-title')}>
-                                                    <Link to="/" className={cx('title')}>
-                                                        How To Self-Learn With Any Schedule
-                                                    </Link>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className={cx('items-card')}>
-                                        <div className={cx('items')}>
-                                            <div className={cx('book-image')}>
-                                                <img
-                                                    src="https://placehold.co/178x267.png"
-                                                    alt=""
-                                                    loading="lazy"
-                                                    draggable="false"
-                                                />
-                                                
                                             </div>
 
                                             <div className={cx('book-info')}>
@@ -217,49 +246,37 @@ function Home() {
 
                             <div className={cx('block-content')}>
                                 <div className={cx('list-content')}>
-                                    <div className={cx('items-card')}>
-                                        <div className={cx('items')}>
-                                            <div className={cx('book-image')}>
-                                                <img
-                                                    src="https://placehold.co/178x267.png"
-                                                    alt=""
-                                                    loading="lazy"
-                                                    draggable="false"
-                                                />
-                                                
-                                            </div>
+                                    {listResult && listResult.length > 0 ? (
+                                        listResult.map((result) => (
+                                            <div className={cx('items-card')} key={result.id}>
+                                                <div className={cx('items')}>
+                                                    <div className={cx('book-image')}>
+                                                        <img
+                                                            src={result.formats['image/jpeg']}
+                                                            alt={result.title || 'Book cover'}
+                                                            loading="lazy"
+                                                            draggable="false"
+                                                        />
+                                                    </div>
 
-                                            <div className={cx('book-info')}>
-                                                <div className={cx('book-title')}>
-                                                    <Link to="/" className={cx('title')}>
-                                                        How To Self-Learn With Any Schedule
-                                                    </Link>
+                                                    <div className={cx('book-info')}>
+                                                        <div className={cx('book-title')}>
+                                                            <Link
+                                                                onClick={() => handleCountView(result.id)}
+                                                                to={{ pathname: `/ebook/${result.id}` }}
+                                                                className={cx('title')}
+                                                                state={{ data: result }}
+                                                            >
+                                                                {result.title || 'Unknow Title'}
+                                                            </Link>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-
-                                    <div className={cx('items-card')}>
-                                        <div className={cx('items')}>
-                                            <div className={cx('book-image')}>
-                                                <img
-                                                    src="https://placehold.co/178x267.png"
-                                                    alt=""
-                                                    loading="lazy"
-                                                    draggable="false"
-                                                />
-                                                
-                                            </div>
-
-                                            <div className={cx('book-info')}>
-                                                <div className={cx('book-title')}>
-                                                    <Link to="/" className={cx('title')}>
-                                                        How To Self-Learn With Any Schedule
-                                                    </Link>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                        ))
+                                    ) : (
+                                        <p>No books available</p>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -278,6 +295,7 @@ function Home() {
 
                             <div className={cx('block-content')}>
                                 <div className={cx('list-content')} ref={rowRef3}>
+
                                     <div className={cx('items-card')}>
                                         <div className={cx('items')}>
                                             <div className={cx('blog-image')}>

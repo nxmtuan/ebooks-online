@@ -1,13 +1,64 @@
 import classNames from 'classnames/bind';
-import styles from './eBook.module.scss';
+import styles from './EBook.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSquareFacebook, faSquareGooglePlus, faSquareXTwitter } from '@fortawesome/free-brands-svg-icons';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
+import { useEffect, useState } from 'react';
+
+import * as getEBookService from '~/services/getEBookService';
 
 const cx = classNames.bind(styles);
 
-function eBook() {
+function EBook() {
+    const { id } = useParams();
+    const location = useLocation();
+    const { data } = location.state || {};
+
+    const [bookData, setBookData] = useState(null);
+    const [isClickable, setIsClickable] = useState(true);
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    });
+
+    useEffect(() => {
+        const fetchApi = async () => {
+            try {
+                const result = await getEBookService.getEBookById(`${id}`);
+                setBookData(result);
+            } catch (error) {
+                console.log('Error fetching data: ', error);
+            }
+        };
+
+        fetchApi();
+    }, [id]);
+
+    const handleCountDownload = async () => {
+        if (!bookData || !isClickable) return;
+
+        setIsClickable(false);
+        try {
+            const updatedDownloadCount = bookData.download_count + 1;
+
+            await getEBookService.updateEBook(bookData.id, { download_count: updatedDownloadCount });
+            setBookData((prevData) => ({ ...prevData, download_count: updatedDownloadCount }));
+
+            setTimeout(() => {
+                setIsClickable(true);
+            }, 4000);
+        } catch (error) {
+            console.log('Error updating download count: ', error);
+        }
+    };
+
+    console.log('End handle: ', bookData);
+
+    if (!data) {
+        return <p>No book data available</p>;
+    }
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('row')}>
@@ -17,26 +68,32 @@ function eBook() {
                             <div className={cx('left-region')}>
                                 <div className={cx('book-image-region')}>
                                     <div className={cx('book-image')}>
-                                        <img src="https://placehold.co/178x267.png" alt="" />
+                                        <img
+                                            src={data.formats['image/jpeg']}
+                                            alt={data.title || 'Book cover'}
+                                            loading="lazy"
+                                            draggable="false"
+                                        />
                                     </div>
                                 </div>
 
                                 <div className={cx('info-region')}>
                                     <div className={cx('published-year')}>
                                         <h2>
-                                            PUBLISHED: <p>2016</p>
+                                            PUBLISHED: <p>{data.published || '0'}</p>
                                         </h2>
                                     </div>
 
                                     <div className={cx('pages-count')}>
                                         <h2>
-                                            PAGES: <p>205</p>
+                                            VIEWS: <p>{data.view_count || '0'}</p>
                                         </h2>
                                     </div>
 
                                     <div className={cx('download-count')}>
                                         <h2>
-                                            DOWNLOAD: <p>481</p>
+                                            DOWNLOAD:{' '}
+                                            {!bookData ? 'Unknow' : <p>{bookData.download_count || '0'}</p>}
                                         </h2>
                                     </div>
 
@@ -63,14 +120,14 @@ function eBook() {
 
                             <div className={cx('right-region')}>
                                 <div className={cx('block-info')}>
-                                    <div className={cx('title')}>The Eye of Nefertiti</div>
-                                    <div className={cx('sub-title')}>A Pharaoh's Cat Novel</div>
+                                    <div className={cx('title')}>{data.title}</div>
+                                    <div className={cx('sub-title')}>{data.sub_title || ''}</div>
                                     <div className={cx('author-and-rate')}>
                                         <div className={cx('author')}>
                                             By
-                                            <Link to={'/author/id'}>Maria Luisa Lang</Link>
+                                            <Link to={'/author/id'}>{data.authors.map(({ name }) => name)}</Link>
                                         </div>
-                                        <Link to={'#reviews'} className={cx('book-rate')}>
+                                        <div className={cx('book-rate')}>
                                             <div className={cx('rate-stars')}>
                                                 <div className={cx('first-star', 'star')}></div>
                                                 <div className={cx('second-star', 'star')}></div>
@@ -79,73 +136,57 @@ function eBook() {
                                                 <div className={cx('fifth-star', 'star')}></div>
                                             </div>
                                             <div className={cx('review-count')}>(0 Reviews)</div>
-                                        </Link>
+                                        </div>
                                     </div>
                                     <div className={cx('option-btn')}>
                                         <div className={cx('download')}>
-                                            <Link to={'/ebooks/download'} className={cx('download-btn')}>
+                                            <a
+                                                href={data.formats['application/octet-stream']}
+                                                onClick={handleCountDownload}
+                                                className={cx('download-btn')}
+                                                style={{ pointerEvents: isClickable ? 'auto' : 'none' }}
+                                            >
                                                 <FontAwesomeIcon icon={faDownload} className={cx('icon')} />
                                                 <p>Free Download</p>
-                                            </Link>
+                                            </a>
                                         </div>
                                         <div className={cx('read')}>
-                                            <Link className={cx('read-btn')}>
+                                            <a href={data.formats['text/html']} className={cx('read-btn')}>
                                                 <p>Read Online</p>
-                                            </Link>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div className={cx('block-summary')}>
                                     <p>
-                                        Now a New Yorker, the Pharaoh’s cat--the ancient Egyptian feline with human
-                                        powers--travels back in time to free Egypt’s legendary Queen Nefertiti from a
-                                        horrific curse, discovering firsthand why her mummy has never been found and her
-                                        famous bust is missing one eye. <br /> <br />
-                                        As in the first Pharaoh’s cat novel, the cat is quick-witted, wisecracking
-                                        narrator as well as free-spirited, ever-curious protagonist, and the story he
-                                        tells is an exotic, imaginative, spell-binding tragicomedy. The Eye of Nefertiti
-                                        also interweaves feline and human, past and present, natural and supernatural.
-                                        It too contains numerous surprises, twists and turns, intriguing characters,
-                                        both human and animal, fascinating revelations about ancient Egyptian history
-                                        and culture. Added to all this is an ingenious use of the Tarot and Italian
-                                        opera. <br /> <br />
-                                        The cat is living happily in New York City with the High Priest, Elena, daughter
-                                        of an Egyptologist, and their infant son, the cat’s beloved Pharaoh
-                                        reincarnated, when the supernatural gradually intrudes in the form of phantasms,
-                                        the plot of an Italian opera, a Tarot card reading, and an unexpected summons to
-                                        present-day Bath Spa disguised as an opportunity for Elena.
+                                        <div>
+                                            <strong>Subjects:</strong>
+                                            <p>
+                                                {data.subjects.map((res) => (
+                                                    <li>{res}</li>
+                                                ))}
+                                            </p>
+                                        </div>
                                         <br /> <br />
-                                        She and the little Pharaoh travel conventionally while the cat and the High
-                                        Priest take the little boat they use for time travel and are diverted to ancient
-                                        Stonehenge for a brief stop-over. The figure at the center of their encounter
-                                        with the Druids has been prefigured in the cat’s phantasms, the Italian opera,
-                                        and the Tarot reading, all his uncanny experiences being in accord with a single
-                                        design.
-                                        <br /> <br />
-                                        Reunited with Elena and the infant Pharaoh in Bath, the cat and the High Priest
-                                        discover a secret tomb below the Georgian house where they are staying, and are
-                                        soon impelled to journey to ancient Egypt in the time of Queen Nefertiti to save
-                                        her from a horrific curse. They become separated as they search for Nefertiti
-                                        and the cat has several adventures before finding her on his own.
-                                        <br /> <br />
-                                        He undertakes an ingenious deception to stay close to her without revealing his
-                                        identity. Being so close, he falls in love with her. He succeeds in lifting the
-                                        horrific curse at great cost to himself. Despite his love, he surrenders
-                                        Nefertiti to history and, mourning his loss, descends into a psychological abyss
-                                        so deep only the Pharaoh can save him.
-                                        <br /> <br />
-                                        Maria Luisa Lang was born in Rome and lives in New York City. She has an art
-                                        degree and is an amateur Egyptologist. The Pharaoh's Cat is her first novel, The
-                                        Eye of Nefertiti her second.
+                                        <div>
+                                            <strong>Bookshelves:</strong>
+                                            <p>
+                                                {data.bookshelves.map((res) => (
+                                                    <li>{res}</li>
+                                                ))}
+                                            </p>
+                                        </div>
                                     </p>
                                 </div>
 
                                 <div className={cx('block-genre')}>
                                     <div className={cx('field-genre')}>
-                                        <div className={cx('genre-btn')}>
-                                            <Link>Fantasy</Link>
-                                        </div>
+                                        {data.bookshelves.map((res) => (
+                                            <div className={cx('genre-btn')}>
+                                                <Link>{res}</Link>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
                             </div>
@@ -245,7 +286,14 @@ function eBook() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className={cx('bottom-region')}></div>
+                                <div className={cx('bottom-region')}>
+                                    <div className={cx('review-btn')}>
+                                        <div className={cx('btn')}>Write Review</div>
+                                    </div>
+                                </div>
+                                <div className={cx('comments-area')}>
+                                    <p>Be the first to review this book</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -255,4 +303,4 @@ function eBook() {
     );
 }
 
-export default eBook;
+export default EBook;

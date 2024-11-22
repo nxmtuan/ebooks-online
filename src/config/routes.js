@@ -1,6 +1,6 @@
 const routes = {
     home: '/',
-    ebook: '/ebook',
+    ebook: '/ebook/:id',
     blogs: '/blogs'
 }
 
