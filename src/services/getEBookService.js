@@ -35,8 +35,10 @@ export const getEBookByEditorChoice = async () => {
 
 export const getEBookByEPrice = async (limit = 7) => {
     try {
-        const res = await httpRequest.getEBookList(`/results/?price=FREE`)
-        const shufferedResult = shuffleArray(res).slice(0, limit)
+        const res = await httpRequest.getEBookList(`/results`)
+        const filteredResult = res.filter(items => items.price_before_sale > 0)
+        const shufferedResult = shuffleArray(filteredResult).slice(0, limit)
+
         return shufferedResult
     } catch (error){
         console.log(error);

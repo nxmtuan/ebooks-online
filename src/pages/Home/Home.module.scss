@@ -13,8 +13,7 @@
 
 //top content
 .top-content-container, 
-.middle-content-container, 
-.bottom-content-container{
+.middle-content-container{
     .row{
         margin-left: -15px;
         margin-right: -15px;
@@ -187,36 +186,15 @@
     }
 }
 
+.popular{
+    .block-content{
+        padding-bottom: 200px;
+    }
+}
+
 .fire-icon{
     margin-left: 5px;
     color: #e26830;
-}
-
-//Bottom content
-.bottom-content{
-    .region-bottom{
-        width: 100%;
-        position: relative;
-        min-height: 1px;
-        padding-left: 15px;
-        padding-right: 15px;
-    }
-
-    .items-card{
-        width: 560px;
-        
-        .blog-image{
-            width: 560px;
-            height: 315px;
-            position: relative;
-            cursor: pointer;
-    
-            img{
-                object-fit: cover;
-            }
-        }
-    }
-
 }
 
 //Media Query
@@ -247,11 +225,6 @@
             height: 60px;
         }
     }
-
-    .bottom-content {
-        padding: 12px 0 35px;
-        margin: 12px 0 20px;
-    }
     
 }
 
@@ -269,22 +242,12 @@
             grid-template-columns: repeat(3, 1fr);
         }
     }
-
-    .bottom-content {
-        padding: 12px 0 35px;
-        margin: 12px 0 20px;
-    }
     
 }
 
 @media screen and (min-width: 768px) and (max-width: 991px) {
     .block-content{
         padding: 0 10px;
-    }
-
-    .bottom-content {
-        padding: 12px 0 40px;
-        margin: 12px 0 25px;
     }
     .trending-book, 
     .popular{
@@ -312,23 +275,11 @@
         padding: 0px;
     }
 
-    .bottom-content {
-        padding: 17px 0 45px;
-        margin: 17px 0 30px;
-    }
-
     .trending-book, 
     .popular{
         .list-content{
             grid-template-columns: repeat(5, 1fr);
         }
-    }
-}
-
-@media screen and (min-width: 1200px) {
-    .bottom-content {
-        padding: 22px 0 50px;
-        margin: 22px 0 30px;
     }
 }
 

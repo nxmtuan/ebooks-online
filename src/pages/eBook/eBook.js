@@ -4,13 +4,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSquareFacebook, faSquareGooglePlus, faSquareXTwitter } from '@fortawesome/free-brands-svg-icons';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { Rating, ReviewRegion } from '~/components/ReviewRegion';
 
 import * as getEBookService from '~/services/getEBookService';
+import handleCountDownload from '~/utils/handleCountDownload';
 
 const cx = classNames.bind(styles);
 
 function EBook() {
+    console.log('eBook re-render');
     const { id } = useParams();
     const location = useLocation();
     const { data } = location.state || {};
@@ -35,23 +38,19 @@ function EBook() {
         fetchApi();
     }, [id]);
 
-    const handleCountDownload = async () => {
+    const countDownload = useCallback(async () => {
         if (!bookData || !isClickable) return;
 
+        const updatedDownloadCount = bookData.download_count + 1;
+        
         setIsClickable(false);
-        try {
-            const updatedDownloadCount = bookData.download_count + 1;
+        setBookData((prevData) => ({ ...prevData, download_count: updatedDownloadCount }));
+        handleCountDownload(bookData.id, updatedDownloadCount)
 
-            await getEBookService.updateEBook(bookData.id, { download_count: updatedDownloadCount });
-            setBookData((prevData) => ({ ...prevData, download_count: updatedDownloadCount }));
-
-            setTimeout(() => {
-                setIsClickable(true);
-            }, 4000);
-        } catch (error) {
-            console.log('Error updating download count: ', error);
-        }
-    };
+        setTimeout(() => {
+            setIsClickable(true);
+        }, 4000);
+    }, [bookData, isClickable])
 
     console.log('End handle: ', bookData);
 
@@ -92,8 +91,7 @@ function EBook() {
 
                                     <div className={cx('download-count')}>
                                         <h2>
-                                            DOWNLOAD:{' '}
-                                            {!bookData ? 'Unknow' : <p>{bookData.download_count || '0'}</p>}
+                                            DOWNLOAD: {!bookData ? 'Unknow' : <p>{bookData.download_count || '0'}</p>}
                                         </h2>
                                     </div>
 
@@ -127,22 +125,13 @@ function EBook() {
                                             By
                                             <Link to={'/author/id'}>{data.authors.map(({ name }) => name)}</Link>
                                         </div>
-                                        <div className={cx('book-rate')}>
-                                            <div className={cx('rate-stars')}>
-                                                <div className={cx('first-star', 'star')}></div>
-                                                <div className={cx('second-star', 'star')}></div>
-                                                <div className={cx('third-star', 'star')}></div>
-                                                <div className={cx('fourth-star', 'star')}></div>
-                                                <div className={cx('fifth-star', 'star')}></div>
-                                            </div>
-                                            <div className={cx('review-count')}>(0 Reviews)</div>
-                                        </div>
+                                        <Rating />
                                     </div>
                                     <div className={cx('option-btn')}>
                                         <div className={cx('download')}>
                                             <a
                                                 href={data.formats['application/octet-stream']}
-                                                onClick={handleCountDownload}
+                                                onClick={countDownload}
                                                 className={cx('download-btn')}
                                                 style={{ pointerEvents: isClickable ? 'auto' : 'none' }}
                                             >
@@ -197,104 +186,7 @@ function EBook() {
                 <div className={cx('bottom-content')}>
                     <div className={cx('container')}>
                         <div className={cx('row')}>
-                            <div className={cx('review-region')}>
-                                <div className={cx('top-region')}>
-                                    <h2>READERS REVIEWS</h2>
-                                </div>
-
-                                <div className={cx('middle-region')}>
-                                    <div className={cx('all-rate-stats')}>
-                                        <div className={cx('count-rates')}>
-                                            <div className={cx('five-stars')}>
-                                                <div className={cx('stars')}>
-                                                    <div className={cx('star', 'st')}></div>
-                                                    <div className={cx('star', 'nd')}></div>
-                                                    <div className={cx('star', 'rd')}></div>
-                                                    <div className={cx('star', 'rth')}></div>
-                                                    <div className={cx('star', 'fth')}></div>
-                                                </div>
-                                                <div className={cx('rate-line')}>
-                                                    <div className={cx('dark-line')}></div>
-                                                    <div className={cx('grey-line')}></div>
-                                                </div>
-                                            </div>
-                                            <div className={cx('four-stars')}>
-                                                <div className={cx('stars')}>
-                                                    <div className={cx('star', '1')}></div>
-                                                    <div className={cx('star', '2')}></div>
-                                                    <div className={cx('star', '3')}></div>
-                                                    <div className={cx('star', '4')}></div>
-                                                    <div className={cx('star', '5')}></div>
-                                                </div>
-                                                <div className={cx('rate-line')}>
-                                                    <div className={cx('dark-line')}></div>
-                                                    <div className={cx('grey-line')}></div>
-                                                </div>
-                                            </div>
-                                            <div className={cx('three-stars')}>
-                                                <div className={cx('stars')}>
-                                                    <div className={cx('star', '1')}></div>
-                                                    <div className={cx('star', '2')}></div>
-                                                    <div className={cx('star', '3')}></div>
-                                                    <div className={cx('star', '4')}></div>
-                                                    <div className={cx('star', '5')}></div>
-                                                </div>
-                                                <div className={cx('rate-line')}>
-                                                    <div className={cx('dark-line')}></div>
-                                                    <div className={cx('grey-line')}></div>
-                                                </div>
-                                            </div>
-                                            <div className={cx('two-stars')}>
-                                                <div className={cx('stars')}>
-                                                    <div className={cx('star', '1')}></div>
-                                                    <div className={cx('star', '2')}></div>
-                                                    <div className={cx('star', '3')}></div>
-                                                    <div className={cx('star', '4')}></div>
-                                                    <div className={cx('star', '5')}></div>
-                                                </div>
-                                                <div className={cx('rate-line')}>
-                                                    <div className={cx('dark-line')}></div>
-                                                    <div className={cx('grey-line')}></div>
-                                                </div>
-                                            </div>
-                                            <div className={cx('one-stars')}>
-                                                <div className={cx('stars')}>
-                                                    <div className={cx('star', '1')}></div>
-                                                    <div className={cx('star', '2')}></div>
-                                                    <div className={cx('star', '3')}></div>
-                                                    <div className={cx('star', '4')}></div>
-                                                    <div className={cx('star', '5')}></div>
-                                                </div>
-                                                <div className={cx('rate-line')}>
-                                                    <div className={cx('dark-line')}></div>
-                                                    <div className={cx('grey-line')}></div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        {/* average rate */}
-                                        <div className={cx('average-rate')}>
-                                            <div className={cx('rate-value')}>0.0</div>
-                                            <div className={cx('rate-message')}>Average from 0 Reviews</div>
-                                            <div className={cx('stars')}>
-                                                <div className={cx('star', '1')}></div>
-                                                <div className={cx('star', '2')}></div>
-                                                <div className={cx('star', '3')}></div>
-                                                <div className={cx('star', '4')}></div>
-                                                <div className={cx('star', '5')}></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className={cx('bottom-region')}>
-                                    <div className={cx('review-btn')}>
-                                        <div className={cx('btn')}>Write Review</div>
-                                    </div>
-                                </div>
-                                <div className={cx('comments-area')}>
-                                    <p>Be the first to review this book</p>
-                                </div>
-                            </div>
+                            <ReviewRegion />
                         </div>
                     </div>
                 </div>
