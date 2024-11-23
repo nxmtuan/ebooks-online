@@ -1,8 +1,21 @@
 import * as httpRequest from '~/utils/httpRequest'
+const shuffleArray = (array) => array.sort(() => Math.random() - 0.5)
 
 export const getListLimit = async (limit = 18) => {
     try {
-        const res = await httpRequest.getEBookList(`/results?_limit=${limit}`);
+        const res = await httpRequest.getEBookList(`/results`);
+
+        const shufferedResult = shuffleArray(res).slice(0, limit)
+        return shufferedResult
+    } catch (error){
+        console.log(error);
+        return []
+    }
+}
+
+export const getAllList = async () => {
+    try {
+        const res = await httpRequest.getEBookList(`/results`);
         return res
     } catch (error){
         console.log(error);
@@ -10,10 +23,21 @@ export const getListLimit = async (limit = 18) => {
     }
 }
 
-export const getEBookByEditorChoice = async (id) => {
+export const getEBookByEditorChoice = async () => {
     try {
         const res = await httpRequest.getEBookList(`/results/?is_editor_choice=true`)
         return res
+    } catch (error){
+        console.log(error);
+        return null
+    }
+}
+
+export const getEBookByEPrice = async (limit = 7) => {
+    try {
+        const res = await httpRequest.getEBookList(`/results/?price=FREE`)
+        const shufferedResult = shuffleArray(res).slice(0, limit)
+        return shufferedResult
     } catch (error){
         console.log(error);
         return null

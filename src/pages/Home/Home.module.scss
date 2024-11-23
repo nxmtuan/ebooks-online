@@ -122,6 +122,12 @@
     line-clamp: 1;
 
     .author{
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        -webkit-line-clamp: 1;
+        line-clamp: 1;
         font-size: 14px;
         color: #777777;
     }
@@ -179,6 +185,11 @@
         margin: 0px;
         padding: 7px 17px 7px 0;
     }
+}
+
+.fire-icon{
+    margin-left: 5px;
+    color: #e26830;
 }
 
 //Bottom content

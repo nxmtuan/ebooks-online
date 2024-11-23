@@ -4,9 +4,11 @@ import { Link } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 
 import * as getEBookService from '~/services/getEBookService';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFire } from '@fortawesome/free-solid-svg-icons';
 
 const cx = classNames.bind(styles);
-//const shuffleArray = (array) => array.sort(() => Math.random() - 0.5)
+const TRENDING_BOOK_BY_VIEW_COUNT = 200000;
 
 function Home() {
     const rowRef1 = useRef(null);
@@ -14,7 +16,9 @@ function Home() {
     const rowRef3 = useRef(null);
 
     const [listResult, setListResult] = useState([]);
+    const [listLimitedResult, setListLimitedResult] = useState([]);
     const [editorChoiceListResult, setEditorChoiceListResult] = useState([]);
+    const [priceListResult, setPriceListResult] = useState([]);
 
     //drag to scroll event
     const applyDragScroll = (rowRef) => {
@@ -72,14 +76,20 @@ function Home() {
     useEffect(() => {
         const fetchApi = async () => {
             try {
-                const result = await getEBookService.getListLimit();
-                //const randomBooks = shuffleArray(result)
-
+                //Fetch Data
+                const listLimited = await getEBookService.getListLimit();
                 const editorChoice = await getEBookService.getEBookByEditorChoice();
-                //const randomEditorChoice = shuffleArray(editorChoice)
+                const listAll = await getEBookService.getAllList();
+                const listByPrice = await getEBookService.getEBookByEPrice();
 
+                //Filter list by view_count
+                const filteredList = listAll.filter((book) => book.view_count > TRENDING_BOOK_BY_VIEW_COUNT);
+
+                //Save data to state
+                setListResult(filteredList);
                 setEditorChoiceListResult(editorChoice);
-                setListResult(result);
+                setListLimitedResult(listLimited);
+                setPriceListResult(listByPrice);
             } catch (error) {
                 console.error('Error fetching data: ', error);
             }
@@ -116,40 +126,50 @@ function Home() {
 
                         <div className={cx('block-content')}>
                             <div className={cx('list-content')} ref={rowRef2}>
+                                {priceListResult && priceListResult.length > 0 ? (
+                                    priceListResult.map((result) => (
+                                        <div className={cx('items-card')}>
+                                            <div className={cx('items')}>
+                                                <div className={cx('book-image')}>
+                                                    <img
+                                                        src={result.formats['image/jpeg']}
+                                                        alt={result.title || 'Book cover'}
+                                                        loading="lazy"
+                                                        draggable="false"
+                                                    />
+                                                </div>
 
-                                <div className={cx('items-card')}>
-                                    <div className={cx('items')}>
-                                        <div className={cx('book-image')}>
-                                            <img
-                                                src="https://placehold.co/178x267.png"
-                                                alt=""
-                                                loading="lazy"
-                                                draggable="false"
-                                            />
-                                        </div>
-
-                                        <div className={cx('book-info')}>
-                                            <div className={cx('book-title')}>
-                                                <Link to="/" className={cx('title')}>
-                                                    How To Self-Learn With Any Schedule
-                                                </Link>
-                                            </div>
-                                            <div className={cx('book-author')}>
-                                                <div to="/" className={cx('author')}>
-                                                    Phyllis Edgerly Ring
-                                                </div>
-                                            </div>
-                                            <div className={cx('price')}>
-                                                <div to="/" className={cx('sale')}>
-                                                    $0.99
-                                                </div>
-                                                <div to="/" className={cx('no-sale')}>
-                                                    $5.99
+                                                <div className={cx('book-info')}>
+                                                    <div className={cx('book-title')}>
+                                                        <Link
+                                                            onClick={() => handleCountView(result.id)}
+                                                            to={{ pathname: `/ebook/${result.id}` }}
+                                                            className={cx('title')}
+                                                            state={{ data: result }}
+                                                        >
+                                                            {result.title || 'Unknow Title'}
+                                                        </Link>
+                                                    </div>
+                                                    <div className={cx('book-author')}>
+                                                        <div to="/" className={cx('author')}>
+                                                            {result.authors.map(({ name }) => name) || 'Book cover'}
+                                                        </div>
+                                                    </div>
+                                                    <div className={cx('price')}>
+                                                        <div to="/" className={cx('sale')}>
+                                                            {result.price || ''}
+                                                        </div>
+                                                        <div to="/" className={cx('no-sale')}>
+                                                            $2.43
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
+                                    ))
+                                ) : (
+                                    <p>No eBook available</p>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -207,32 +227,45 @@ function Home() {
                         {/* trending book */}
                         <div className={cx('trending-book')}>
                             <div className={cx('block-header')}>
-                                <h2>TRENDING BOOKS</h2>
+                                <h2>
+                                    TRENDING BOOKS <FontAwesomeIcon icon={faFire} className={cx('fire-icon')} />
+                                </h2>
                                 <Link to="/">(View all)</Link>
                             </div>
 
                             <div className={cx('block-content')}>
                                 <div className={cx('list-content')}>
-                                    <div className={cx('items-card')}>
-                                        <div className={cx('items')}>
-                                            <div className={cx('book-image')}>
-                                                <img
-                                                    src="https://placehold.co/178x267.png"
-                                                    alt=""
-                                                    loading="lazy"
-                                                    draggable="false"
-                                                />
-                                            </div>
+                                    {listResult && listResult.length > 0 ? (
+                                        listResult.map((result) => (
+                                            <div className={cx('items-card')}>
+                                                <div className={cx('items')}>
+                                                    <div className={cx('book-image')}>
+                                                        <img
+                                                            src={result.formats['image/jpeg']}
+                                                            alt={result.title || 'Book cover'}
+                                                            loading="lazy"
+                                                            draggable="false"
+                                                        />
+                                                    </div>
 
-                                            <div className={cx('book-info')}>
-                                                <div className={cx('book-title')}>
-                                                    <Link to="/" className={cx('title')}>
-                                                        How To Self-Learn With Any Schedule
-                                                    </Link>
+                                                    <div className={cx('book-info')}>
+                                                        <div className={cx('book-title')}>
+                                                            <Link
+                                                                onClick={() => handleCountView(result.id)}
+                                                                to={{ pathname: `/ebook/${result.id}` }}
+                                                                className={cx('title')}
+                                                                state={{ data: result }}
+                                                            >
+                                                                {result.title || 'Unknow Title'}
+                                                            </Link>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
+                                        ))
+                                    ) : (
+                                        <p>No eBook available</p>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -246,8 +279,8 @@ function Home() {
 
                             <div className={cx('block-content')}>
                                 <div className={cx('list-content')}>
-                                    {listResult && listResult.length > 0 ? (
-                                        listResult.map((result) => (
+                                    {listLimitedResult && listLimitedResult.length > 0 ? (
+                                        listLimitedResult.map((result) => (
                                             <div className={cx('items-card')} key={result.id}>
                                                 <div className={cx('items')}>
                                                     <div className={cx('book-image')}>
@@ -295,7 +328,6 @@ function Home() {
 
                             <div className={cx('block-content')}>
                                 <div className={cx('list-content')} ref={rowRef3}>
-
                                     <div className={cx('items-card')}>
                                         <div className={cx('items')}>
                                             <div className={cx('blog-image')}>
