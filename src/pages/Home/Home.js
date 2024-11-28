@@ -1,11 +1,12 @@
-import classNames from 'classnames/bind';
-import styles from './Home.module.scss';
 import { Link } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 
-import * as getEBookService from '~/services/getEBookService';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFire } from '@fortawesome/free-solid-svg-icons';
+import classNames from 'classnames/bind';
+
+import styles from './Home.module.scss';
+import * as getEBookService from '~/services/getEBookService';
 import dragToScrollEvent from '~/utils/dragToScrollEvent';
 import { BookCard, MoreInfoBookCard } from '~/components/BookCard';
 
@@ -45,7 +46,6 @@ function Home() {
                 const editorChoice = await getEBookService.getEBookByEditorChoice();
                 const listAll = await getEBookService.getAllList();
                 const listByPrice = await getEBookService.getEBookByEPrice();
-                console.warn('Fetched Data: ', listByPrice)
 
                 //Filter list by view_count
                 const filteredList = listAll.filter((book) => book.view_count > TRENDING_BOOK_BY_VIEW_COUNT);
@@ -75,7 +75,7 @@ function Home() {
                         </div>
 
                         <div className={cx('block-content')}>
-                            <div className={cx('list-content')} ref={rowRef2}>
+                            <div className={cx('list-content')} ref={rowRef1}>
                                 {priceListResult && priceListResult.length > 0 ? (
                                     priceListResult.map((result) => <MoreInfoBookCard dataDeals={result} />)
                                 ) : (
@@ -95,13 +95,33 @@ function Home() {
                         <div className={cx('editor-choice')}>
                             <div className={cx('block-header')}>
                                 <h2>EDITOR'S CHOICE</h2>
-                                <Link to="/">(View all)</Link>
+                                <Link to="#">(View all)</Link>
                             </div>
 
                             <div className={cx('block-content')}>
-                                <div className={cx('list-content')} ref={rowRef1}>
+                                <div className={cx('list-content')} ref={rowRef2}>
                                     {editorChoiceListResult && editorChoiceListResult.length > 0 ? (
                                         editorChoiceListResult.map((result) => <BookCard dataBook={result} />)
+                                    ) : (
+                                        <p>No books available</p>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Recommended */}
+                        <div className={cx('recommended')}>
+                            <div className={cx('block-header')}>
+                                <h2>Recommended for You</h2>
+                                <Link to="#">(View all)</Link>
+                            </div>
+
+                            <div className={cx('block-content')}>
+                                <div className={cx('list-content')} ref={rowRef3}>
+                                    {editorChoiceListResult && editorChoiceListResult.length > 0 ? (
+                                        editorChoiceListResult.map((result) => (
+                                            <BookCard dataBook={result} />
+                                        ))
                                     ) : (
                                         <p>No books available</p>
                                     )}
@@ -115,7 +135,7 @@ function Home() {
                                 <h2>
                                     TRENDING BOOKS <FontAwesomeIcon icon={faFire} className={cx('fire-icon')} />
                                 </h2>
-                                <Link to="/">(View all)</Link>
+                                <Link to="#">(View all)</Link>
                             </div>
 
                             <div className={cx('block-content')}>
@@ -133,7 +153,7 @@ function Home() {
                         <div className={cx('popular')}>
                             <div className={cx('block-header')}>
                                 <h2>POPULAR CLASSICS</h2>
-                                <Link to="/">(View all)</Link>
+                                <Link to="#">(View all)</Link>
                             </div>
 
                             <div className={cx('block-content')}>
@@ -147,6 +167,20 @@ function Home() {
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            {/* Bottom content */}
+            <div className={cx('bottom-content')}>
+                <div className={cx('bottom-title')}>
+                    <p>Recently Questions</p>
+                    <Link to={'#'}>(View all)</Link>
+                </div>
+                <div className={cx('q-a-area')}>
+                    No Question Yet!
+                </div>
+                <div className={cx('comments-area')}>
+                    <p>No comment yet</p>
                 </div>
             </div>
         </div>

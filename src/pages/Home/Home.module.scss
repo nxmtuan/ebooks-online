@@ -157,44 +157,117 @@
     }
 }
 
-.editor-choice .block-content{
-    height: 310px;
+.editor-choice .block-content,
+.recommended .block-content,
+.trending-book .block-content{
+    height: 350px;
 } 
 
-.editor-choice .list-content{
+.editor-choice .list-content,
+.recommended .list-content{
     height: 100%;
 }
 
 .editor-choice .items-card,
-.editor-choice .book-image{
+.editor-choice .book-image,
+.recommended .items-card,
+.recommended .book-image{
     width: 173px;
     height: 260px;
 }
 
+.recommended,
+.editor-choice,
 .trending-book, 
 .popular{
-    margin-top: 30px;
-    
-    .list-content{
-        display: grid;
-        grid-template-columns: repeat(6, 1fr);
-    }
-    
+    padding-top: 40px;
+}
+
+.recommended .list-content{
+    height: 100%;
+}
+
+.trending-book .list-content{
+    height: 100%;
+}
+
+.trending-book .list-content, 
+.popular .list-content{
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+
     .items-card{
         margin: 0px;
-        padding: 7px 17px 7px 0;
     }
+}
+
+.trending-book .items-card{
+    padding: 7px 17px 0px 0;
+}
+
+.popular .items-card{
+    padding: 7px 17px 40px 0;
 }
 
 .popular{
     .block-content{
-        padding-bottom: 200px;
+        padding-bottom: 50px;
     }
 }
 
 .fire-icon{
     margin-left: 5px;
     color: #e26830;
+}
+
+//Bottom content
+.bottom-content{
+    font-family: var(--font-family-CenturyGothic);
+    width: 100%;
+    height: auto;
+    border-top: solid 1px #dad8d8;
+    padding: 0 0 100px 0;
+}
+
+.bottom-title{
+    display: flex;
+    align-items: center;
+    padding: 50px 0 50px 0;
+
+    p{
+        font-weight: 700;
+        font-size: 25px;
+        text-transform: uppercase;
+        color: var(--secondary-color);
+    }
+
+    a{
+        font-family: var(--font-family-helvetica);
+        color: var(--primary-color);
+        margin-left: 1em;
+        font-size: 16px;
+    }
+}
+
+.q-a-area{
+    font-size: 16px;
+    margin-left: 2em;
+    color: var(--secondary-color);
+    padding-bottom: 50px;
+}
+
+.comments-area{
+    width: 100%;
+    height: 75px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: solid 2px #a39b9b;
+
+    p{
+        font-size: 20px;
+        color: #a39b9b;
+    }
 }
 
 //Media Query

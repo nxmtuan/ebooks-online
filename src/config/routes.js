@@ -1,7 +1,7 @@
 const routes = {
     home: '/',
     ebook: '/ebook/:id',
-    blogs: '/blogs'
+    search: '/search'
 }
 
 export default routes

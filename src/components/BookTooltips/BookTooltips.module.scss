@@ -1,0 +1,75 @@
+.tooltips-area{
+    display: flex;
+    width: 350px;
+    height: 260px;
+    background-color: #ffffff;
+    box-shadow: 0 0 10px 7px rgba(0, 0, 0, 0.3);
+
+    a{
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        -webkit-line-clamp: 3;
+        line-clamp: 3;
+    }
+}
+
+.left-tooltip{
+    width: 50%;
+
+    img{
+        width: 100%;
+        height: 258px;
+        vertical-align: middle;
+    }
+}
+
+.right-tooltip{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 50%;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 22px;
+    color: #434343;
+    padding: 18px 10px;
+
+    span{
+        display: inline-block;
+        text-align: left;
+    }
+    
+}
+
+.tooltip-title,
+.tooltip-author{
+    color: var(--primary-color);
+    
+}
+
+.download-btn{
+    margin: auto auto 15px;
+    width: 157px;
+    height: 40px;
+    display: block;
+    background: var(--primary-color);
+    text-align: center;
+    padding: 10px 30px;
+    color: #ffffff;
+
+    &:hover{
+        text-decoration: none;
+    }
+}
+
+.read-more-btn{
+    display: block;
+    font-size: 12px;
+    line-height: 16px;
+    text-align: center;
+    color: var(--primary-color);
+}
+

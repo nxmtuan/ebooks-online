@@ -1,36 +1,55 @@
-import classNames from 'classnames/bind';
-import styles from '~/pages/Home/Home.module.scss';
 import { Link } from 'react-router-dom';
+import HeadlessTippy from '@tippyjs/react/headless';
+
+import classNames from 'classnames/bind';
+
+import styles from '~/pages/Home/Home.module.scss';
 import handleCountView from '~/utils/handleCountView';
+import BookTooltips from '~/components/BookTooltips';
 
 const cx = classNames.bind(styles);
 
 function BookCard({ dataBook }) {
+    console.log('BookCard re-render');
+    
     return (
         <div className={cx('items-card')}>
-            <div className={cx('items')}>
-                <div className={cx('book-image')}>
-                    <img
-                        src={dataBook.formats['image/jpeg'] || 'https://placehold.co/560x315.png'}
-                        alt={dataBook.title || 'Book cover'}
-                        loading="lazy"
-                        draggable="false"
-                    />
-                </div>
+            <HeadlessTippy
+                render={(attrs) => (
+                    <div tabIndex="-1" {...attrs}>
+                        <BookTooltips data={dataBook}/>
+                    </div>
+                )}
+                interactive={true}
+                delay={[500, 500]}
+                offset={[-50, -250]}
+                lazy={true}
+                appendTo={'parent'}
+            >
+                <div className={cx('items')}>
+                    <div className={cx('book-image')}>
+                        <img
+                            src={dataBook.formats['image/jpeg'] || 'https://placehold.co/560x315.png'}
+                            alt={dataBook.title || 'Book cover'}
+                            loading="lazy"
+                            draggable="false"
+                        />
+                    </div>
 
-                <div className={cx('book-info')}>
-                    <div className={cx('book-title')}>
-                        <Link
-                            onClick={() => handleCountView(dataBook.id)}
-                            to={{ pathname: `/ebook/${dataBook.id}` }}
-                            className={cx('title')}
-                            state={{ data: dataBook }}
-                        >
-                            {dataBook.title || 'Unknow Title'}
-                        </Link>
+                    <div className={cx('book-info')}>
+                        <div className={cx('book-title')}>
+                            <Link
+                                onClick={() => handleCountView(dataBook.id)}
+                                to={{ pathname: `/ebook/${dataBook.id}` }}
+                                className={cx('title')}
+                                state={{ data: dataBook }}
+                            >
+                                {dataBook.title || 'Unknow Title'}
+                            </Link>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </HeadlessTippy>
         </div>
     );
 }

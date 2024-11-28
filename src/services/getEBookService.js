@@ -1,12 +1,15 @@
+import { generateSeed } from '~/seed/seedRandom';
 import * as httpRequest from '~/utils/httpRequest'
-const shuffleArray = (array) => array.sort(() => Math.random() - 0.5)
+import shuffleArray from '~/utils/shuffleArray';
+
+const seed = generateSeed()
 
 export const getListLimit = async (limit = 18) => {
     try {
         const res = await httpRequest.getEBookList(`/results`);
+        const randomizedDataResult = shuffleArray(res, seed).slice(0, limit)
 
-        const shufferedResult = shuffleArray(res).slice(0, limit)
-        return shufferedResult
+        return randomizedDataResult
     } catch (error){
         console.log(error);
         return []
@@ -37,9 +40,9 @@ export const getEBookByEPrice = async (limit = 7) => {
     try {
         const res = await httpRequest.getEBookList(`/results`)
         const filteredResult = res.filter(items => items.price_before_sale > 0)
-        const shufferedResult = shuffleArray(filteredResult).slice(0, limit)
+        const randomizedDataResult = shuffleArray(filteredResult, seed).slice(0, limit)
 
-        return shufferedResult
+        return randomizedDataResult
     } catch (error){
         console.log(error);
         return null

@@ -1,12 +1,13 @@
+import { useCallback, useEffect, useState } from 'react';
+import { Link, useLocation, useParams } from 'react-router-dom';
+
 import classNames from 'classnames/bind';
-import styles from './EBook.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSquareFacebook, faSquareGooglePlus, faSquareXTwitter } from '@fortawesome/free-brands-svg-icons';
-import { Link, useLocation, useParams } from 'react-router-dom';
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
-import { useCallback, useEffect, useState } from 'react';
-import { Rating, ReviewRegion } from '~/components/ReviewRegion';
 
+import styles from './EBook.module.scss';
+import { Rating, ReviewRegion } from '~/components/ReviewRegion';
 import * as getEBookService from '~/services/getEBookService';
 import handleCountDownload from '~/utils/handleCountDownload';
 
