@@ -9,11 +9,11 @@ import BookTooltips from '~/components/BookTooltips';
 
 const cx = classNames.bind(styles);
 
-function BookCard({ dataBook }) {
+function BookCard({ dataBook, itemsCardStyle,  bookImageStyle }) {
     console.log('BookCard re-render');
     
     return (
-        <div className={cx('items-card')}>
+        <div className={cx('items-card')} style={itemsCardStyle}>
             <HeadlessTippy
                 render={(attrs) => (
                     <div tabIndex="-1" {...attrs}>
@@ -27,7 +27,7 @@ function BookCard({ dataBook }) {
                 appendTo={'parent'}
             >
                 <div className={cx('items')}>
-                    <div className={cx('book-image')}>
+                    <div className={cx('book-image')} style={bookImageStyle}>
                         <img
                             src={dataBook.formats['image/jpeg'] || 'https://placehold.co/560x315.png'}
                             alt={dataBook.title || 'Book cover'}
