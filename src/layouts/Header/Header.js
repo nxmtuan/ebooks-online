@@ -1,16 +1,36 @@
 import classNames from 'classnames/bind';
 import styles from './Header.module.scss';
 import HeadlessTippy from '@tippyjs/react/headless';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faCaretUp, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
+import * as getEBookService from '~/services/getEBookService';
 
 const cx = classNames.bind(styles);
 
 function Header() {
+    const [value, setValue] = useState('');
     const [isDiscoverVisible, setIsDiscoverVisible] = useState(false);
     const [isProfileVisible, setIsProfileVisible] = useState(false);
+
+    const navigate = useNavigate();
+
+    const handleSearch = async (e) => {
+        try {
+            const result = await getEBookService.search(value);
+            //Fetch Data
+            console.log(result);
+
+            e.preventDefault()
+            if(value.trim()){
+                navigate(`/search?keyword=${encodeURIComponent(value)}`, { state: { resultData: result } });
+            }
+            
+        } catch (error) {
+            console.error('Error fetching data: ', error);
+        }
+    };
 
     return (
         <div className={cx('wrapper')}>
@@ -113,8 +133,11 @@ function Header() {
                         type="text"
                         className={cx('search-input')}
                         placeholder="Search by title, author or keyword"
+                        onChange={(e) => setValue(e.target.value)}
+                        spellCheck={false}
+                        value={value}
                     />
-                    <button className={cx('search-btn')}>
+                    <button className={cx('search-btn')} onClick={handleSearch}>
                         <FontAwesomeIcon icon={faSearch} className={cx('search-icon')} />
                     </button>
                 </div>

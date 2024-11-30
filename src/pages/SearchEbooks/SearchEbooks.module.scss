@@ -1,51 +1,51 @@
-.wrapper{
+.wrapper {
     margin-right: auto;
     margin-left: auto;
     padding-left: 15px;
     padding-right: 15px;
 }
 
-.row{
+.row {
     margin-left: -15px;
     margin-right: -15px;
 }
 
-.main-region{
+.main-region {
     margin: 50px 0 100px 0;
     font-family: var(--font-family-CenturyGothic);
 }
 
-.container{
+.container {
     min-height: 500px;
     margin-right: auto;
     margin-left: auto;
     padding-left: 15px;
     padding-right: 15px;
 
-    .row{
+    .row {
         min-height: 100%;
         display: flex;
     }
 }
 
 //Left region
-.left-region{
+.left-region {
     width: 30%;
     min-height: 1px;
     padding-left: 15px;
     padding-right: 15px;
 }
 
-.child-of-left-region{
+.child-of-left-region {
     background-color: #fbfbfb;
     width: 100%;
     height: auto;
 }
 
-.left-region-content{
+.left-region-content {
     padding: 35px 30px;
 
-    h2{
+    h2 {
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
@@ -58,22 +58,24 @@
     }
 }
 
-.genre-filter{
+.genre-filter {
     width: 100%;
 }
 
-.filter{
+.filter {
     width: 100%;
     display: flex;
     margin-bottom: 15px;
 }
 
 //Custom checkbox
-input[type="checkbox"] {
+input[type='checkbox'],
+input[type='radio']{
     display: none;
 }
 
-.custom-checkbox span {
+.custom-checkbox span,
+.custom-radio span{
     display: inline-block;
     width: 20px;
     height: 20px;
@@ -84,13 +86,14 @@ input[type="checkbox"] {
     transition: all 0.3s ease;
 }
 
-input[type="checkbox"]:checked + span {
+input[type='checkbox']:checked + span,
+input[type='radio']:checked + span{
     background-color: var(--secondary-color);
     border-color: var(--secondary-color);
     position: relative;
 }
 
-input[type="checkbox"]:checked + span::after {
+input[type='checkbox']:checked + span::after{
     content: '';
     position: absolute;
     top: 1px;
@@ -102,11 +105,11 @@ input[type="checkbox"]:checked + span::after {
     transform: rotate(45deg);
 }
 
-.sort-filter h2{
+.sort-filter h2 {
     margin-top: 40px;
 }
 
-.btn-region{
+.btn-region {
     clear: both;
     padding-top: 55px;
     margin-top: 40px;
@@ -114,7 +117,7 @@ input[type="checkbox"]:checked + span::after {
     text-align: center;
 }
 
-.apply-btn{
+.apply-btn {
     max-width: 260px;
     margin: 0;
     display: inline-block;
@@ -129,13 +132,13 @@ input[type="checkbox"]:checked + span::after {
     padding: 15px 55px;
     width: 100%;
 
-    &:hover{
+    &:hover {
         background-color: #15917a;
     }
 }
 
 //Right region
-.right-region{
+.right-region {
     width: 70%;
     position: relative;
     min-height: 1px;
@@ -143,23 +146,50 @@ input[type="checkbox"]:checked + span::after {
     padding-right: 15px;
 }
 
-.title{
+.title {
     width: 100%;
     font-size: 36px;
     font-weight: bold;
     color: var(--secondary-color);
     line-height: 1.28;
     margin-bottom: 30px;
+
+    p{
+        margin-top: 10px;
+        font-weight: normal;
+        font-size: 20px;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        -webkit-line-clamp: 1;
+        line-clamp: 1;
+    }
 }
 
-.block{
+.sort-format {
+    display: flex;
+    margin: 24px 0 35px;
+    justify-content: end;
+    align-items: center;
+    padding-right: 40px;
+
+    .icon {
+        margin-left: 10px;
+    }
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.block {
     margin-bottom: 0;
     overflow-x: hidden;
-    padding-bottom: 50px;
+    padding-bottom: 20px;
 }
 
-
-.list{
+.list {
     display: flex;
     width: 100%;
     //white-space: nowrap;
@@ -170,11 +200,38 @@ input[type="checkbox"]:checked + span::after {
     grid-template-columns: repeat(4, 1fr);
 }
 
+//Pagination
+.pagination {
+    display: flex;
+    list-style: none;
+    justify-content: center;
+    padding: 0;
+}
 
+.pagination li {
+    margin: 0 5px;
+}
 
+.pagination a {
+    display: block;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    color: var(--primary-color);
+    cursor: pointer;
 
+    &:hover {
+        text-decoration: none;
+        background-color: #85c0b2;
+        color: #fff;
+    }
+}
 
+.pagination .active a {
+    background-color: var(--primary-color);
+    color: white;
+}
 
-
-
-
+.pagination .disabled a {
+    color: #ccc;
+    pointer-events: none;
+}

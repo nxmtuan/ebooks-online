@@ -11,8 +11,6 @@ import handleCountDownload from '~/utils/handleCountDownload';
 const cx = classNames.bind(styles);
 
 function BookTooltips({ data }) {
-
-    console.log('tooltip re-render');
     
     const [bookData, setBookData] = useState(null);
     const [isClickable, setIsClickable] = useState(true);

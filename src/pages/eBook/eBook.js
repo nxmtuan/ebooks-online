@@ -14,7 +14,6 @@ import handleCountDownload from '~/utils/handleCountDownload';
 const cx = classNames.bind(styles);
 
 function EBook() {
-    console.log('eBook re-render');
     const { id } = useParams();
     const location = useLocation();
     const { data } = location.state || {};
@@ -52,8 +51,6 @@ function EBook() {
             setIsClickable(true);
         }, 4000);
     }, [bookData, isClickable])
-
-    console.log('End handle: ', bookData);
 
     if (!data) {
         return <p>No book data available</p>;

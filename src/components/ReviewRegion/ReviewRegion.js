@@ -107,7 +107,6 @@ function ReviewRegion() {
 }
 
 function Rating() {
-    console.log('Rating re-render');
     return (
         <div className={cx('book-rate')}>
             <div className={cx('rate-stars')}>

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -14,15 +14,15 @@ const cx = classNames.bind(styles);
 const TRENDING_BOOK_BY_VIEW_COUNT = 200000;
 
 function Home() {
-    console.log('Home re-render');
     const rowRef1 = useRef(null);
     const rowRef2 = useRef(null);
     const rowRef3 = useRef(null);
 
-    const [listResult, setListResult] = useState([]);
+    const [listFilterResult, setListFilterResult] = useState([]);
     const [listLimitedResult, setListLimitedResult] = useState([]);
     const [editorChoiceListResult, setEditorChoiceListResult] = useState([]);
     const [priceListResult, setPriceListResult] = useState([]);
+    const navigate = useNavigate();
 
     //Drag to scroll event
     useEffect(() => {
@@ -51,7 +51,7 @@ function Home() {
                 const filteredList = listAll.filter((book) => book.view_count > TRENDING_BOOK_BY_VIEW_COUNT);
 
                 //Save data to state
-                setListResult(filteredList);
+                setListFilterResult(filteredList);
                 setEditorChoiceListResult(editorChoice);
                 setListLimitedResult(listLimited);
                 setPriceListResult(listByPrice);
@@ -62,6 +62,16 @@ function Home() {
 
         fetchApi();
     }, []);
+
+    const handleGetAllList = async (e) => {
+        try {
+            const listAll = await getEBookService.getAllList();
+            e.preventDefault()
+            navigate(`/search?keyword=${('All eBooks')}`, { state: { list: listAll } });
+        } catch (error) {
+            console.error('Error fetching data: ', error);
+        }
+    }
 
     return (
         <div className={cx('wrapper')}>
@@ -77,7 +87,7 @@ function Home() {
                         <div className={cx('block-content')}>
                             <div className={cx('list-content')} ref={rowRef1}>
                                 {priceListResult && priceListResult.length > 0 ? (
-                                    priceListResult.map((result) => <MoreInfoBookCard dataDeals={result} />)
+                                    priceListResult.map((result) => <MoreInfoBookCard dataDeals={result}  key={result.id}/>)
                                 ) : (
                                     <p>No eBook available</p>
                                 )}
@@ -140,8 +150,8 @@ function Home() {
 
                             <div className={cx('block-content')}>
                                 <div className={cx('list-content')}>
-                                    {listResult && listResult.length > 0 ? (
-                                        listResult.map((result) => <BookCard dataBook={result} />)
+                                    {listFilterResult && listFilterResult.length > 0 ? (
+                                        listFilterResult.map((result) => <BookCard dataBook={result} />)
                                     ) : (
                                         <p>No eBook available</p>
                                     )}
@@ -153,7 +163,7 @@ function Home() {
                         <div className={cx('popular')}>
                             <div className={cx('block-header')}>
                                 <h2>POPULAR CLASSICS</h2>
-                                <Link to="#">(View all)</Link>
+                                <Link onClick={handleGetAllList}>(View all)</Link>
                             </div>
 
                             <div className={cx('block-content')}>

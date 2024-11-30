@@ -2,27 +2,51 @@ import classNames from 'classnames/bind';
 import styles from './SearchEbooks.module.scss';
 import { BookCard } from '~/components/BookCard';
 import { useEffect, useState } from 'react';
-import * as getEBookService from '~/services/getEBookService';
+//import * as getEBookService from '~/services/getEBookService';
+import ReactPaginate from 'react-paginate';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons';
+import { useLocation, useSearchParams } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
 function SearchEbooks() {
-    const [listLimitedResult, setListLimitedResult] = useState([]);
+    const location = useLocation();
+    const [searchParams] = useSearchParams();
+    const searchResult = location.state?.resultData;
+    const listAllEbooks = location.state?.list;
+
+    const keyword = searchParams.get('keyword');
 
     useEffect(() => {
-        const fetchApi = async () => {
-            try {
-                //Fetch Data
-                const listLimited = await getEBookService.getListLimit();
-
-                setListLimitedResult(listLimited);
-            } catch (error) {
-                console.error('Error fetching data: ', error);
-            }
-        };
-
-        fetchApi();
+        window.scrollTo(0, 0);
     }, []);
+
+    const [sortFormat, setSortFormat] = useState(false);
+    const [currentPageData, setCurrentPageData] = useState([]);
+    const [currentPage, setCurrentPage] = useState(0);
+    const itemsPerPage = 20;
+
+    useEffect(() => {
+        const startIndex = currentPage * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+
+        if (searchResult && searchResult.length > 0) {
+            setCurrentPageData(searchResult.slice(startIndex, endIndex));
+        } else if (listAllEbooks && listAllEbooks.length > 0) {
+            setCurrentPageData(listAllEbooks.slice(startIndex, endIndex));
+        } else {
+            setCurrentPageData([]);
+        }
+    }, [currentPage, searchResult, listAllEbooks]);
+
+    const handlePageChange = (selectedPage) => {
+        setCurrentPage(selectedPage.selected);
+    };
+
+    const handleSortFormat = () => {
+        setSortFormat(true);
+    };
 
     return (
         <div className={cx('wrapper')}>
@@ -37,38 +61,38 @@ function SearchEbooks() {
                                             <h2>Genre</h2>
                                             <div className={cx('filter')}>
                                                 <label className={cx('custom-checkbox')}>
-                                                    <input type="checkbox" className={cx('checkmark')} />
+                                                    <input type="checkbox" />
                                                     <span></span>
                                                 </label>
                                                 <p>Adventure</p>
                                             </div>
                                         </div>
-    
+
                                         <div className={cx('sort-filter')}>
                                             <h2>Sort by</h2>
                                             <div className={cx('filter')}>
-                                                <label className={cx('custom-checkbox')}>
-                                                    <input type="checkbox" className={cx('checkmark')} />
+                                                <label className={cx('custom-radio')}>
+                                                    <input type="radio" name="option" />
                                                     <span></span>
                                                 </label>
                                                 <p>A - Z</p>
                                             </div>
                                             <div className={cx('filter')}>
-                                                <label className={cx('custom-checkbox')}>
-                                                    <input type="checkbox" />
+                                                <label className={cx('custom-radio')}>
+                                                    <input type="radio" name="option" />
                                                     <span></span>
                                                 </label>
                                                 <p>Views</p>
                                             </div>
                                             <div className={cx('filter')}>
-                                                <label className={cx('custom-checkbox')}>
-                                                    <input type="checkbox" />
+                                                <label className={cx('custom-radio')}>
+                                                    <input type="radio" name="option" />
                                                     <span></span>
                                                 </label>
                                                 <p>Downloads</p>
                                             </div>
                                         </div>
-    
+
                                         <div className={cx('btn-region')}>
                                             <button className={cx('apply-btn')}>Apply</button>
                                         </div>
@@ -77,15 +101,26 @@ function SearchEbooks() {
                             </div>
 
                             <div className={cx('right-region')}>
-                                <div className={cx('title')}>Search Results</div>
+                                <div className={cx('title')}>
+                                    Search Results
+                                    <p>Results for: "{keyword || ''}".</p>
+                                </div>
+                                <div className={cx('sort-format')} onClick={() => handleSortFormat()}>
+                                    <p>Sort format: </p>
+                                    <FontAwesomeIcon
+                                        className={cx('icon')}
+                                        icon={sortFormat ? faArrowUp : faArrowDown}
+                                    />
+                                </div>
                                 <div className={cx('result-region')}>
                                     <div className={cx('block')}>
                                         <div className={cx('list')}>
-                                            {listLimitedResult && listLimitedResult.length > 0 ? (
-                                                listLimitedResult.map((result) => (
+                                            {currentPageData && currentPageData.length > 0 ? (
+                                                currentPageData.map((result) => (
                                                     <BookCard
+                                                        key={result.id}
                                                         dataBook={result}
-                                                        itemsCardStyle={{ width: '165px', paddingBottom: '30px',  }}
+                                                        itemsCardStyle={{ width: '165px', paddingBottom: '30px' }}
                                                         bookImageStyle={{ height: '247px' }}
                                                     />
                                                 ))
@@ -95,6 +130,20 @@ function SearchEbooks() {
                                         </div>
                                     </div>
                                 </div>
+
+                                <ReactPaginate
+                                    previousLabel={'< Previous'}
+                                    nextLabel={'Next >'}
+                                    breakLabel={'...'}
+                                    pageCount={Math.ceil(
+                                        (searchResult?.length || 0) / itemsPerPage || (listAllEbooks?.length || 0) / itemsPerPage
+                                    )}
+                                    marginPagesDisplayed={2}
+                                    pageRangeDisplayed={3}
+                                    onPageChange={handlePageChange}
+                                    containerClassName={cx('pagination')}
+                                    activeClassName={cx('active')}
+                                />
                             </div>
                         </div>
                     </div>

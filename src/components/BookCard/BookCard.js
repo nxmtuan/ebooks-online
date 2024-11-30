@@ -10,7 +10,6 @@ import BookTooltips from '~/components/BookTooltips';
 const cx = classNames.bind(styles);
 
 function BookCard({ dataBook, itemsCardStyle,  bookImageStyle }) {
-    console.log('BookCard re-render');
     
     return (
         <div className={cx('items-card')} style={itemsCardStyle}>
@@ -55,10 +54,9 @@ function BookCard({ dataBook, itemsCardStyle,  bookImageStyle }) {
 }
 
 function MoreInfoBookCard({ dataDeals }) {
-    console.log('MoreInfoBookCard re-render');
     return (
-        <div className={cx('items-card')}>
-            <div className={cx('items')}>
+        <div className={cx('items-card')} >
+            <div className={cx('items')} key={dataDeals.id}>
                 <div className={cx('book-image')}>
                     <img
                         src={dataDeals.formats['image/jpeg']}
