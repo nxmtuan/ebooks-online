@@ -12,16 +12,14 @@ import { BookCard, MoreInfoBookCard } from '~/components/BookCard';
 
 const cx = classNames.bind(styles);
 const TRENDING_BOOK_BY_VIEW_COUNT = 200000;
+const LIMITED_LIST_BOOKS = 18;
 
 function Home() {
     const rowRef1 = useRef(null);
     const rowRef2 = useRef(null);
     const rowRef3 = useRef(null);
 
-    const [listFilterResult, setListFilterResult] = useState([]);
-    const [listLimitedResult, setListLimitedResult] = useState([]);
-    const [editorChoiceListResult, setEditorChoiceListResult] = useState([]);
-    const [priceListResult, setPriceListResult] = useState([]);
+    const [listAllBooks, setListAllBooks] = useState([]);
     const navigate = useNavigate();
 
     //Drag to scroll event
@@ -41,20 +39,8 @@ function Home() {
     useEffect(() => {
         const fetchApi = async () => {
             try {
-                //Fetch Data
-                const listLimited = await getEBookService.getListLimit();
-                const editorChoice = await getEBookService.getEBookByEditorChoice();
                 const listAll = await getEBookService.getAllList();
-                const listByPrice = await getEBookService.getEBookByEPrice();
-
-                //Filter list by view_count
-                const filteredList = listAll.filter((book) => book.view_count > TRENDING_BOOK_BY_VIEW_COUNT);
-
-                //Save data to state
-                setListFilterResult(filteredList);
-                setEditorChoiceListResult(editorChoice);
-                setListLimitedResult(listLimited);
-                setPriceListResult(listByPrice);
+                setListAllBooks(listAll);
             } catch (error) {
                 console.error('Error fetching data: ', error);
             }
@@ -63,15 +49,36 @@ function Home() {
         fetchApi();
     }, []);
 
-    const handleGetAllList = async (e) => {
-        try {
-            const listAll = await getEBookService.getAllList();
-            e.preventDefault()
-            navigate(`/search?keyword=${('All eBooks')}`, { state: { list: listAll } });
-        } catch (error) {
-            console.error('Error fetching data: ', error);
-        }
-    }
+    //Filter eBooks
+    const ListBooksLimited = listAllBooks.slice(0, LIMITED_LIST_BOOKS);
+    const ListTrendingBooksByView = listAllBooks.filter((book) => book.view_count > TRENDING_BOOK_BY_VIEW_COUNT);
+    const ListBooksByEditorChoice = listAllBooks.filter((book) => book.is_editor_choice === true);
+    const ListBooksByPrice = listAllBooks.filter((book) => book.price_before_sale > 0);
+
+    // const getAllGenres = listAllBooks.flatMap((book) => book.bookshelves);
+    // const uniqueGenres = [...new Set(getAllGenres)];
+    // console.log(uniqueGenres);
+
+    //handle get list with conditions
+    const handleGetAllList = (e) => {
+        e.preventDefault();
+        navigate(`/search?keyword=${'All eBooks'}`, { state: { list: listAllBooks } });
+    };
+
+    const handleGetListFree = (e) => {
+        e.preventDefault();
+        navigate(`/search?keyword=${'Free eBooks'}`, { state: { listFree: ListBooksByPrice } });
+    };
+
+    const handleGetListEditorChoice = (e) => {
+        e.preventDefault();
+        navigate(`/search?keyword=${'Editors choice'}`, { state: { listChoice: ListBooksByEditorChoice } });
+    };
+
+    const handleGetListTrending = (e) => {
+        e.preventDefault();
+        navigate(`/search?keyword=${'Trending book'}`, { state: { listTrending: ListTrendingBooksByView } });
+    };
 
     return (
         <div className={cx('wrapper')}>
@@ -81,13 +88,15 @@ function Home() {
                     <div className={cx('row')}>
                         <div className={cx('block-header')}>
                             <h2>FREE EBOOKS AND DEALS</h2>
-                            <Link to="/">(View all)</Link>
+                            <Link onClick={handleGetListFree}>(View all)</Link>
                         </div>
 
                         <div className={cx('block-content')}>
                             <div className={cx('list-content')} ref={rowRef1}>
-                                {priceListResult && priceListResult.length > 0 ? (
-                                    priceListResult.map((result) => <MoreInfoBookCard dataDeals={result}  key={result.id}/>)
+                                {ListBooksByPrice && ListBooksByPrice.length > 0 ? (
+                                    ListBooksByPrice.map((result) => (
+                                        <MoreInfoBookCard dataDeals={result} key={result.id} />
+                                    ))
                                 ) : (
                                     <p>No eBook available</p>
                                 )}
@@ -105,13 +114,13 @@ function Home() {
                         <div className={cx('editor-choice')}>
                             <div className={cx('block-header')}>
                                 <h2>EDITOR'S CHOICE</h2>
-                                <Link to="#">(View all)</Link>
+                                <Link onClick={handleGetListEditorChoice}>(View all)</Link>
                             </div>
 
                             <div className={cx('block-content')}>
                                 <div className={cx('list-content')} ref={rowRef2}>
-                                    {editorChoiceListResult && editorChoiceListResult.length > 0 ? (
-                                        editorChoiceListResult.map((result) => <BookCard dataBook={result} />)
+                                    {ListBooksByEditorChoice && ListBooksByEditorChoice.length > 0 ? (
+                                        ListBooksByEditorChoice.map((result) => <BookCard dataBook={result} />)
                                     ) : (
                                         <p>No books available</p>
                                     )}
@@ -128,10 +137,8 @@ function Home() {
 
                             <div className={cx('block-content')}>
                                 <div className={cx('list-content')} ref={rowRef3}>
-                                    {editorChoiceListResult && editorChoiceListResult.length > 0 ? (
-                                        editorChoiceListResult.map((result) => (
-                                            <BookCard dataBook={result} />
-                                        ))
+                                    {ListBooksByEditorChoice && ListBooksByEditorChoice.length > 0 ? (
+                                        ListBooksByEditorChoice.map((result) => <BookCard dataBook={result} />)
                                     ) : (
                                         <p>No books available</p>
                                     )}
@@ -145,13 +152,13 @@ function Home() {
                                 <h2>
                                     TRENDING BOOKS <FontAwesomeIcon icon={faFire} className={cx('fire-icon')} />
                                 </h2>
-                                <Link to="#">(View all)</Link>
+                                <Link onClick={handleGetListTrending}>(View all)</Link>
                             </div>
 
                             <div className={cx('block-content')}>
                                 <div className={cx('list-content')}>
-                                    {listFilterResult && listFilterResult.length > 0 ? (
-                                        listFilterResult.map((result) => <BookCard dataBook={result} />)
+                                    {ListTrendingBooksByView && ListTrendingBooksByView.length > 0 ? (
+                                        ListTrendingBooksByView.map((result) => <BookCard dataBook={result} />)
                                     ) : (
                                         <p>No eBook available</p>
                                     )}
@@ -168,8 +175,8 @@ function Home() {
 
                             <div className={cx('block-content')}>
                                 <div className={cx('list-content')}>
-                                    {listLimitedResult && listLimitedResult.length > 0 ? (
-                                        listLimitedResult.map((result) => <BookCard dataBook={result} />)
+                                    {ListBooksLimited && ListBooksLimited.length > 0 ? (
+                                        ListBooksLimited.map((result) => <BookCard dataBook={result} />)
                                     ) : (
                                         <p>No books available</p>
                                     )}
@@ -186,9 +193,7 @@ function Home() {
                     <p>Recently Questions</p>
                     <Link to={'#'}>(View all)</Link>
                 </div>
-                <div className={cx('q-a-area')}>
-                    No Question Yet!
-                </div>
+                <div className={cx('q-a-area')}>No Question Yet!</div>
                 <div className={cx('comments-area')}>
                     <p>No comment yet</p>
                 </div>

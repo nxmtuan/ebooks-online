@@ -15,6 +15,9 @@ function SearchEbooks() {
     const [searchParams] = useSearchParams();
     const searchResult = location.state?.resultData;
     const listAllEbooks = location.state?.list;
+    const listFreeEbooks = location.state?.listFree;
+    const listChoiceEbooks = location.state?.listChoice;
+    const listTrendingEbooks = location.state?.listTrending;
 
     const keyword = searchParams.get('keyword');
 
@@ -35,10 +38,16 @@ function SearchEbooks() {
             setCurrentPageData(searchResult.slice(startIndex, endIndex));
         } else if (listAllEbooks && listAllEbooks.length > 0) {
             setCurrentPageData(listAllEbooks.slice(startIndex, endIndex));
+        } else if (listFreeEbooks && listFreeEbooks.length > 0) {
+            setCurrentPageData(listFreeEbooks.slice(startIndex, endIndex));
+        } else if (listChoiceEbooks && listChoiceEbooks.length > 0) {
+            setCurrentPageData(listChoiceEbooks.slice(startIndex, endIndex));
+        } else if (listTrendingEbooks && listTrendingEbooks.length > 0) {
+            setCurrentPageData(listTrendingEbooks.slice(startIndex, endIndex));
         } else {
             setCurrentPageData([]);
         }
-    }, [currentPage, searchResult, listAllEbooks]);
+    }, [currentPage, searchResult, listAllEbooks, listFreeEbooks, listChoiceEbooks, listTrendingEbooks]);
 
     const handlePageChange = (selectedPage) => {
         setCurrentPage(selectedPage.selected);
@@ -91,6 +100,13 @@ function SearchEbooks() {
                                                 </label>
                                                 <p>Downloads</p>
                                             </div>
+                                            <div className={cx('filter')}>
+                                                <label className={cx('custom-radio')}>
+                                                    <input type="radio" name="option" />
+                                                    <span></span>
+                                                </label>
+                                                <p>Random</p>
+                                            </div>
                                         </div>
 
                                         <div className={cx('btn-region')}>
@@ -136,7 +152,11 @@ function SearchEbooks() {
                                     nextLabel={'Next >'}
                                     breakLabel={'...'}
                                     pageCount={Math.ceil(
-                                        (searchResult?.length || 0) / itemsPerPage || (listAllEbooks?.length || 0) / itemsPerPage
+                                        (searchResult?.length || 0) / itemsPerPage ||
+                                            (listAllEbooks?.length || 0) / itemsPerPage ||
+                                            (listFreeEbooks?.length || 0) / itemsPerPage ||
+                                            (listChoiceEbooks?.length || 0) / itemsPerPage ||
+                                            (listTrendingEbooks?.length || 0) / itemsPerPage,
                                     )}
                                     marginPagesDisplayed={2}
                                     pageRangeDisplayed={3}

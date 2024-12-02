@@ -41,7 +41,7 @@ function Footer() {
                         </ul>
                     </div>
                     <div className={cx('block-footer')}>
-                        <div className={cx('copyright')}>© 2024 Advertical Media LLC. All Rights Reserved.</div>
+                        <div className={cx('copyright')}>© 2024. All Rights Reserved.</div>
                         <div className={cx('terms-privacy')}>
                             <Link to='/terms'>Terms</Link>
                             -

@@ -1,51 +1,34 @@
 import { Link } from 'react-router-dom';
-import { memo, useCallback, useEffect, useState } from 'react';
+import { memo, useCallback, useState } from 'react';
 
 import classNames from 'classnames/bind';
 
 import styles from './BookTooltips.module.scss';
 import handleCountView from '~/utils/handleCountView';
-import * as getEBookService from '~/services/getEBookService';
 import handleCountDownload from '~/utils/handleCountDownload';
 
 const cx = classNames.bind(styles);
 
 function BookTooltips({ data }) {
-    
-    const [bookData, setBookData] = useState(null);
     const [isClickable, setIsClickable] = useState(true);
 
-    useEffect(() => {
-        const fetchApi = async () => {
-            try {
-                const result = await getEBookService.getEBookById(`${data.id}`);
-                setBookData(result);
-            } catch (error) {
-                console.log('Error fetching data: ', error);
-            }
-        };
-
-        fetchApi();
-    }, [data.id]);
-
     const countDownload = useCallback(async () => {
-        if (!bookData || !isClickable) return;
+        if (!data || !isClickable) return;
 
-        const updatedDownloadCount = bookData.download_count + 1;
-        
+        const updatedDownloadCount = data.download_count + 1;
+
         setIsClickable(false);
-        setBookData((prevData) => ({ ...prevData, download_count: updatedDownloadCount }));
-        handleCountDownload(bookData.id, updatedDownloadCount)
+        handleCountDownload(data.id, updatedDownloadCount);
 
         setTimeout(() => {
             setIsClickable(true);
         }, 4000);
-    }, [bookData, isClickable])
+    }, [data, isClickable]);
 
     return (
         <div className={cx('tooltips-area')}>
             <div className={cx('left-tooltip')}>
-                <Link 
+                <Link
                     onClick={() => handleCountView(data.id)}
                     to={{ pathname: `/ebook/${data.id}` }}
                     state={{ data: data }}
@@ -59,7 +42,7 @@ function BookTooltips({ data }) {
                 </Link>
             </div>
             <div className={cx('right-tooltip')}>
-                <Link 
+                <Link
                     className={cx('tooltip-title')}
                     onClick={() => handleCountView(data.id)}
                     to={{ pathname: `/ebook/${data.id}` }}
@@ -69,7 +52,7 @@ function BookTooltips({ data }) {
                 </Link>
                 <span>by</span>
                 <Link className={cx('tooltip-author')}>{data.authors.map(({ name }) => name) || 'Book cover'}</Link>
-                <a 
+                <a
                     className={cx('download-btn')}
                     href={data.formats['application/octet-stream']}
                     onClick={countDownload}
