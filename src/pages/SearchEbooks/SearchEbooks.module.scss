@@ -70,12 +70,12 @@
 
 //Custom checkbox
 input[type='checkbox'],
-input[type='radio']{
+input[type='radio'] {
     display: none;
 }
 
 .custom-checkbox span,
-.custom-radio span{
+.custom-radio span {
     display: inline-block;
     width: 20px;
     height: 20px;
@@ -87,13 +87,13 @@ input[type='radio']{
 }
 
 input[type='checkbox']:checked + span,
-input[type='radio']:checked + span{
+input[type='radio']:checked + span {
     background-color: var(--secondary-color);
     border-color: var(--secondary-color);
     position: relative;
 }
 
-input[type='checkbox']:checked + span::after{
+input[type='checkbox']:checked + span::after {
     content: '';
     position: absolute;
     top: 1px;
@@ -111,7 +111,6 @@ input[type='checkbox']:checked + span::after{
 
 .btn-region {
     clear: both;
-    padding-top: 55px;
     margin-top: 40px;
     display: block;
     text-align: center;
@@ -154,7 +153,7 @@ input[type='checkbox']:checked + span::after{
     line-height: 1.28;
     margin-bottom: 30px;
 
-    p{
+    p {
         margin-top: 10px;
         font-weight: normal;
         font-size: 20px;

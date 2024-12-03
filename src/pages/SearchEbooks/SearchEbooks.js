@@ -25,6 +25,8 @@ function SearchEbooks() {
 
     const [selectedGenres, setSelectedGenres] = useState([]);
     const [filteredBooks, setFilteredBooks] = useState([]);
+    // eslint-disable-next-line no-unused-vars
+    const [sortOption, setSortOption] = useState('');
 
     const [sortFormat, setSortFormat] = useState(false);
     const [currentPageData, setCurrentPageData] = useState([]);
@@ -54,7 +56,6 @@ function SearchEbooks() {
             setCurrentPageData([]);
         }
     }, [currentPage, searchResult, listAllEbooks, listFreeEbooks, listChoiceEbooks, listTrendingEbooks, filteredBooks]);
-    console.log(currentPageData);
 
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
@@ -101,7 +102,21 @@ function SearchEbooks() {
         },
         [selectedGenres, navigate],
     );
-    console.log(filteredBooks);
+
+    const handleSortChange = (event) => {
+        const selectedOption = event.target.value;
+        setSortOption(selectedOption);
+
+        if (selectedOption === 'A-Z') {
+            currentPageData.sort((a, b) => a.title.localeCompare(b.title));
+        }
+        if (selectedOption === 'Views') {
+            currentPageData.sort((a, b) => b.view_count - a.view_count);
+        }
+        if (selectedOption === 'Downloads') {
+            currentPageData.sort((a, b) => b.download_count - a.download_count);
+        }
+    };
 
     return (
         <div className={cx('wrapper')}>
@@ -133,42 +148,50 @@ function SearchEbooks() {
                                             )}
                                         </div>
 
+                                        <div className={cx('btn-region')}>
+                                            <button className={cx('apply-btn')} onClick={handleApplyFilter}>
+                                                Apply
+                                            </button>
+                                        </div>
+
                                         <div className={cx('sort-filter')}>
                                             <h2>Sort by</h2>
                                             <div className={cx('filter')}>
                                                 <label className={cx('custom-radio')}>
-                                                    <input type="radio" name="option" />
+                                                    <input
+                                                        type="radio"
+                                                        value="A-Z"
+                                                        name="option"
+                                                        onChange={handleSortChange}
+                                                    />
                                                     <span></span>
                                                 </label>
                                                 <p>A - Z</p>
                                             </div>
                                             <div className={cx('filter')}>
                                                 <label className={cx('custom-radio')}>
-                                                    <input type="radio" name="option" />
+                                                    <input
+                                                        type="radio"
+                                                        value="Views"
+                                                        name="option"
+                                                        onChange={handleSortChange}
+                                                    />
                                                     <span></span>
                                                 </label>
                                                 <p>Views</p>
                                             </div>
                                             <div className={cx('filter')}>
                                                 <label className={cx('custom-radio')}>
-                                                    <input type="radio" name="option" />
+                                                    <input
+                                                        type="radio"
+                                                        value="Downloads"
+                                                        name="option"
+                                                        onChange={handleSortChange}
+                                                    />
                                                     <span></span>
                                                 </label>
                                                 <p>Downloads</p>
                                             </div>
-                                            <div className={cx('filter')}>
-                                                <label className={cx('custom-radio')}>
-                                                    <input type="radio" name="option" />
-                                                    <span></span>
-                                                </label>
-                                                <p>Random</p>
-                                            </div>
-                                        </div>
-
-                                        <div className={cx('btn-region')}>
-                                            <button className={cx('apply-btn')} onClick={handleApplyFilter}>
-                                                Apply
-                                            </button>
                                         </div>
                                     </div>
                                 </div>

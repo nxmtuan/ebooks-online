@@ -3,9 +3,9 @@
 :root {
     --primary-color: #17a288;
     --secondary-color: #616161;
-    --primary-text-color: #6B6B6F;
-    --header-color: linear-gradient(to right, #FF7854 0%, #FF5079 100%);
-    --header-color-backup: webkit-gradient(linear, left top, right top, from(#FF7854), to(#FF5079));
+    --primary-text-color: #6b6b6f;
+    --header-color: linear-gradient(to right, #ff7854 0%, #ff5079 100%);
+    --header-color-backup: webkit-gradient(linear, left top, right top, from(#ff7854), to(#ff5079));
 
     //fonts
     --font-family-CenturyGothic: 'CenturyGothic', san-serif;
@@ -18,22 +18,22 @@
     --dstar-image: url('../../assets/images/dstar.png');
 }
 
-body{
+body {
     font-family: var(--font-family-helvetica);
     color: #333;
 }
 
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-a{
+a {
     text-decoration: none;
     cursor: pointer;
 
-    &:hover{
+    &:hover {
         text-decoration: underline;
     }
 }
@@ -42,7 +42,7 @@ ul {
     list-style: none;
 }
 
-img{
+img {
     width: 100%;
     height: 100%;
     background-size: cover;
