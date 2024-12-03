@@ -1,14 +1,14 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFire } from '@fortawesome/free-solid-svg-icons';
 import classNames from 'classnames/bind';
 
 import styles from './Home.module.scss';
-import * as getEBookService from '~/services/getEBookService';
 import dragToScrollEvent from '~/utils/dragToScrollEvent';
 import { BookCard, MoreInfoBookCard } from '~/components/BookCard';
+import { useEBook } from '~/context/contextAPI';
 
 const cx = classNames.bind(styles);
 const TRENDING_BOOK_BY_VIEW_COUNT = 200000;
@@ -18,8 +18,6 @@ function Home() {
     const rowRef1 = useRef(null);
     const rowRef2 = useRef(null);
     const rowRef3 = useRef(null);
-
-    const [listAllBooks, setListAllBooks] = useState([]);
     const navigate = useNavigate();
 
     //Drag to scroll event
@@ -35,34 +33,19 @@ function Home() {
         };
     }, []);
 
-    //Fetch Api
-    useEffect(() => {
-        const fetchApi = async () => {
-            try {
-                const listAll = await getEBookService.getAllList();
-                setListAllBooks(listAll);
-            } catch (error) {
-                console.error('Error fetching data: ', error);
-            }
-        };
-
-        fetchApi();
-    }, []);
+    //get API result
+    const { listAll } = useEBook();
 
     //Filter eBooks
-    const ListBooksLimited = listAllBooks.slice(0, LIMITED_LIST_BOOKS);
-    const ListTrendingBooksByView = listAllBooks.filter((book) => book.view_count > TRENDING_BOOK_BY_VIEW_COUNT);
-    const ListBooksByEditorChoice = listAllBooks.filter((book) => book.is_editor_choice === true);
-    const ListBooksByPrice = listAllBooks.filter((book) => book.price_before_sale > 0);
-
-    // const getAllGenres = listAllBooks.flatMap((book) => book.bookshelves);
-    // const uniqueGenres = [...new Set(getAllGenres)];
-    // console.log(uniqueGenres);
+    const ListBooksLimited = listAll.slice(0, LIMITED_LIST_BOOKS);
+    const ListTrendingBooksByView = listAll.filter((book) => book.view_count > TRENDING_BOOK_BY_VIEW_COUNT);
+    const ListBooksByEditorChoice = listAll.filter((book) => book.is_editor_choice === true);
+    const ListBooksByPrice = listAll.filter((book) => book.price_before_sale > 0);
 
     //handle get list with conditions
     const handleGetAllList = (e) => {
         e.preventDefault();
-        navigate(`/search?keyword=${'All eBooks'}`, { state: { list: listAllBooks } });
+        navigate(`/search?keyword=${'All eBooks'}`, { state: { list: listAll } });
     };
 
     const handleGetListFree = (e) => {

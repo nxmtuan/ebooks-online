@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faCaretUp, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import * as getEBookService from '~/services/getEBookService';
+import popularGenres from '~/utils/popularGenres';
 
 const cx = classNames.bind(styles);
 
@@ -19,14 +20,25 @@ function Header() {
     const handleSearch = async (e) => {
         try {
             const result = await getEBookService.search(value);
-            //Fetch Data
-            console.log(result);
 
-            e.preventDefault()
-            if(value.trim()){
+            e.preventDefault();
+            if (value.trim()) {
                 navigate(`/search?keyword=${encodeURIComponent(value)}`, { state: { resultData: result } });
+                setValue('');
             }
-            
+        } catch (error) {
+            console.error('Error fetching data: ', error);
+        }
+    };
+
+    const handleSearchGenres = async (value) => {
+        try {
+            const result = await getEBookService.search(value);
+
+            //e.preventDefault();
+            if (value.trim()) {
+                navigate(`/search?genres=${value}`, { state: { resultData: result } });
+            }
         } catch (error) {
             console.error('Error fetching data: ', error);
         }
@@ -47,42 +59,15 @@ function Header() {
                             <div className={cx('menu-card', 'genres')}>
                                 <h3>Genres</h3>
                                 <ul>
-                                    <li>
-                                        <Link to="/authors">Action & Adventure</Link>
-                                    </li>
-                                    <li>
-                                        <Link to="/languages">Bios & History</Link>
-                                    </li>
-                                    <li>
-                                        <Link to="/genres">Children's</Link>
-                                    </li>
-                                    <li>
-                                        <Link to="/articles">Fantasy</Link>
-                                    </li>
-                                    <li>
-                                        <Link to="/author-interviews">Historical Fiction</Link>
-                                    </li>
-                                    <li>
-                                        <Link to="/discuss">Horror</Link>
-                                    </li>
-                                    <li>
-                                        <Link to="/authors">Literary Fiction</Link>
-                                    </li>
-                                    <li>
-                                        <Link to="/languages">Mystery & Thriller</Link>
-                                    </li>
-                                    <li>
-                                        <Link to="/genres">Non-Fiction</Link>
-                                    </li>
-                                    <li>
-                                        <Link to="/articles">Romance</Link>
-                                    </li>
-                                    <li>
-                                        <Link to="/author-interviews">Science Fiction</Link>
-                                    </li>
-                                    <li>
-                                        <Link to="/discuss">Young Adult</Link>
-                                    </li>
+                                    {popularGenres && popularGenres.length > 0 ? (
+                                        popularGenres.map((result, index) => (
+                                            <li key={index}>
+                                                <Link onClick={() => handleSearchGenres(result)}>{result}</Link>
+                                            </li>
+                                        ))
+                                    ) : (
+                                        <p>No genre found!</p>
+                                    )}
                                 </ul>
                             </div>
                             <div className={cx('menu-card', 'resources')}>
@@ -132,7 +117,7 @@ function Header() {
                     <input
                         type="text"
                         className={cx('search-input')}
-                        placeholder="Search by title, author or keyword"
+                        placeholder="Search by title, author, genre,..."
                         onChange={(e) => setValue(e.target.value)}
                         spellCheck={false}
                         value={value}
