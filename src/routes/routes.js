@@ -1,8 +1,8 @@
 import config from '~/config';
 
 //pages
-import EBook from '~/pages/EBook/EBook';
-import Home from '~/pages/Home/Home';
+import EBook from '~/pages/EBook';
+import Home from '~/pages/Home';
 import SearchEbooks from '~/pages/SearchEbooks/SearchEbooks';
 
 const publicRoutes = [

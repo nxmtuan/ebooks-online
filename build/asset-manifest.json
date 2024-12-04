@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "/static/css/main.f0352e93.css",
+    "main.js": "/static/js/main.cf85a3db.js",
+    "static/js/453.2d1e3869.chunk.js": "/static/js/453.2d1e3869.chunk.js",
+    "static/media/CenturyGothicRegular.ttf": "/static/media/CenturyGothicRegular.b1b792bab1bff8f27ba7.ttf",
+    "static/media/CenturyGothicRegularBold.ttf": "/static/media/CenturyGothicRegularBold.861d22617fdfce5fc922.ttf",
+    "static/media/helvetica.ttf": "/static/media/helvetica.1036b43a75cf00bd4c18.ttf",
+    "static/media/l7gfbjR61M69yt8Z2QKtlA.woff2": "/static/media/l7gfbjR61M69yt8Z2QKtlA.dc1055a560567859c5fb.woff2",
+    "static/media/star.png": "/static/media/star.84476d961fcbf6033bfe.png",
+    "static/media/glyphicons-halflings-regular.woff2": "/static/media/glyphicons-halflings-regular.be810be3a3e14c682a25.woff2",
+    "index.html": "/index.html",
+    "main.f0352e93.css.map": "/static/css/main.f0352e93.css.map",
+    "main.cf85a3db.js.map": "/static/js/main.cf85a3db.js.map",
+    "453.2d1e3869.chunk.js.map": "/static/js/453.2d1e3869.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f0352e93.css",
+    "static/js/main.cf85a3db.js"
+  ]
+}
