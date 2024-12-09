@@ -42,15 +42,15 @@ function EBook() {
         if (!bookData || !isClickable) return;
 
         const updatedDownloadCount = bookData.download_count + 1;
-        
+
         setIsClickable(false);
         setBookData((prevData) => ({ ...prevData, download_count: updatedDownloadCount }));
-        handleCountDownload(bookData.id, updatedDownloadCount)
+        handleCountDownload(bookData.id, updatedDownloadCount);
 
         setTimeout(() => {
             setIsClickable(true);
         }, 4000);
-    }, [bookData, isClickable])
+    }, [bookData, isClickable]);
 
     if (!data) {
         return <p>No book data available</p>;

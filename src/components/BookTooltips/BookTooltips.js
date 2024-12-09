@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { memo, useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import classNames from 'classnames/bind';
 
@@ -73,4 +73,4 @@ function BookTooltips({ data }) {
     );
 }
 
-export default memo(BookTooltips);
+export default BookTooltips;

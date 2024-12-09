@@ -36,6 +36,21 @@
     padding-right: 15px;
 }
 
+.sub-left-region {
+    display: flex;
+    width: auto;
+    height: 60px;
+    background-color: #fbfbfb;
+    border-bottom: 5px solid #fff;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-family-CenturyGothic);
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--secondary-color);
+}
+
 .child-of-left-region {
     background-color: #fbfbfb;
     width: 100%;
@@ -105,8 +120,8 @@ input[type='checkbox']:checked + span::after {
     transform: rotate(45deg);
 }
 
-.sort-filter h2 {
-    margin-top: 40px;
+.sort-filter {
+    margin-bottom: 40px;
 }
 
 .btn-region {
@@ -233,4 +248,43 @@ input[type='checkbox']:checked + span::after {
 .pagination .disabled a {
     color: #ccc;
     pointer-events: none;
+}
+
+@media screen and (max-width: 600px) {
+    .container {
+        .row {
+            flex-direction: column;
+        }
+    }
+
+    .left-region {
+        width: 100%;
+    }
+
+    .sub-left-region {
+        margin: 0 15px 15px 15px;
+        border: 1.5px solid var(--secondary-color);
+    }
+
+    // .child-of-left-region {
+    //     display: none;
+    // }
+
+    .right-region {
+        width: 100%;
+    }
+
+    .sort-format {
+        padding-right: 0;
+    }
+
+    .list {
+        grid-template-columns: repeat(2, 1fr);
+        place-items: center;
+    }
+
+    .pagination {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
 }

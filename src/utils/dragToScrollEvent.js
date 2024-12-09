@@ -3,38 +3,64 @@ const dragToScrollEvent = (rowRef) => {
     if (!row) return;
 
     let isDragging = false;
-    let startX;
+    let startX, startY;
     let scrollLeft;
+    let isHorizontalScroll = false;
 
-    const handleMouseDown = (e) => {
+    const handleStart = (e) => {
         isDragging = true;
-        startX = e.pageX - row.offsetLeft;
+        const touch = e.touches ? e.touches[0] : e;
+        startX = touch.pageX - row.offsetLeft;
+        startY = touch.pageY; // Lấy tọa độ Y để phát hiện cuộn dọc
         scrollLeft = row.scrollLeft;
+        isHorizontalScroll = false; // Reset trạng thái cuộn ngang
     };
 
-    const handleMouseMove = (e) => {
+    const handleMove = (e) => {
         if (!isDragging) return;
-        e.preventDefault();
-        const x = e.pageX - row.offsetLeft;
-        const walk = x - startX;
-        row.scrollLeft = scrollLeft - walk;
+
+        const touch = e.touches ? e.touches[0] : e;
+        const deltaX = touch.pageX - row.offsetLeft - startX;
+        const deltaY = touch.pageY - startY;
+
+        // Phát hiện cuộn ngang nếu người dùng kéo ngang đáng kể
+        if (!isHorizontalScroll && Math.abs(deltaX) > Math.abs(deltaY)) {
+            isHorizontalScroll = true; // Xác nhận là cuộn ngang
+        }
+
+        // Chỉ ngăn chặn hành vi mặc định khi cuộn ngang
+        if (isHorizontalScroll) {
+            e.preventDefault();
+            row.scrollLeft = scrollLeft - deltaX; // Cuộn ngang
+        }
     };
 
-    const handleMouseUpOrLeave = () => {
+    const handleEnd = () => {
         isDragging = false;
     };
 
-    row.addEventListener('mousedown', handleMouseDown);
-    row.addEventListener('mousemove', handleMouseMove);
-    row.addEventListener('mouseup', handleMouseUpOrLeave);
-    row.addEventListener('mouseleave', handleMouseUpOrLeave);
+    // Thêm sự kiện chuột
+    row.addEventListener('mousedown', handleStart);
+    row.addEventListener('mousemove', handleMove);
+    row.addEventListener('mouseup', handleEnd);
+    row.addEventListener('mouseleave', handleEnd);
 
+    // Thêm sự kiện cảm ứng
+    row.addEventListener('touchstart', handleStart, { passive: false });
+    row.addEventListener('touchmove', handleMove, { passive: false });
+    row.addEventListener('touchend', handleEnd);
+
+    // Dọn dẹp sự kiện
     return () => {
-        row.removeEventListener('mousedown', handleMouseDown);
-        row.removeEventListener('mousemove', handleMouseMove);
-        row.removeEventListener('mouseup', handleMouseUpOrLeave);
-        row.removeEventListener('mouseleave', handleMouseUpOrLeave);
+        row.removeEventListener('mousedown', handleStart);
+        row.removeEventListener('mousemove', handleMove);
+        row.removeEventListener('mouseup', handleEnd);
+        row.removeEventListener('mouseleave', handleEnd);
+
+        row.removeEventListener('touchstart', handleStart);
+        row.removeEventListener('touchmove', handleMove);
+        row.removeEventListener('touchend', handleEnd);
     };
 };
 
-export default dragToScrollEvent
+export default dragToScrollEvent;
