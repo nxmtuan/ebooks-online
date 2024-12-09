@@ -285,17 +285,50 @@
             grid-template-columns: repeat(3, 1fr);
         }
         .items-card {
-            width: 130px;
+            width: 115px;
             height: 273px;
             padding: 7px;
         }
         .book-image {
             width: 100%;
-            height: 178px;
+            height: 150px;
         }
         .book-title {
             width: 100%;
             height: 60px;
+        }
+    }
+
+    .items-card {
+        width: 163px;
+    }
+    .book-image {
+        height: 240px;
+    }
+
+    .editor-choice {
+        .items-card {
+            width: 163px;
+        }
+        .book-image {
+            width: 100%;
+            height: 240px;
+        }
+        .block-content {
+            padding: 0;
+        }
+    }
+
+    .recommended {
+        .items-card {
+            width: 163px;
+        }
+        .book-image {
+            width: 100%;
+            height: 240px;
+        }
+        .block-content {
+            padding: 0;
         }
     }
 }
