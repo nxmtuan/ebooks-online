@@ -62,6 +62,22 @@ function BookCard({ dataBook, itemsCardStyle, bookImageStyle }) {
     );
 }
 
+function BookCardLoading({ itemsCardStyle, bookImageStyle }) {
+    return (
+        <div className={cx('items-card')} style={itemsCardStyle}>
+            <div className={cx('items')}>
+                <div className={cx('book-image')} style={bookImageStyle}>
+                    <img src="" alt="" />
+                </div>
+
+                <div className={cx('book-info')}>
+                    <div className={cx('book-title')}></div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
 function MoreInfoBookCard({ dataDeals }) {
     return (
         <div className={cx('items-card')}>
@@ -111,4 +127,4 @@ function MoreInfoBookCard({ dataDeals }) {
     );
 }
 
-export { BookCard, MoreInfoBookCard };
+export { BookCard, MoreInfoBookCard, BookCardLoading };
