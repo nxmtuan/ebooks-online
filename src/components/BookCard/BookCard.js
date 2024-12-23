@@ -30,18 +30,12 @@ function BookCard({ dataBook, itemsCardStyle, bookImageStyle }) {
             >
                 <div className={cx('items')}>
                     <div className={cx('book-image')} style={bookImageStyle}>
-                        <Link
-                            onClick={() => handleCountView(dataBook.id)}
-                            to={{ pathname: `/ebook/${dataBook.id}` }}
-                            state={{ data: dataBook }}
-                        >
-                            <img
-                                src={dataBook.formats['image/jpeg'] || 'https://placehold.co/560x315.png'}
-                                alt={dataBook.title || 'Book cover'}
-                                loading="lazy"
-                                draggable="false"
-                            />
-                        </Link>
+                        <img
+                            src={dataBook.formats['image/jpeg'] || 'https://placehold.co/560x315.png'}
+                            alt={dataBook.title || 'Book cover'}
+                            loading="lazy"
+                            draggable="false"
+                        />
                     </div>
 
                     <div className={cx('book-info')}>
@@ -83,18 +77,12 @@ function MoreInfoBookCard({ dataDeals }) {
         <div className={cx('items-card')}>
             <div className={cx('items')} key={dataDeals.id}>
                 <div className={cx('book-image')}>
-                    <Link
-                        onClick={() => handleCountView(dataDeals.id)}
-                        to={{ pathname: `/ebook/${dataDeals.id}` }}
-                        state={{ data: dataDeals }}
-                    >
-                        <img
-                            src={dataDeals.formats['image/jpeg']}
-                            alt={dataDeals.title || 'Book cover'}
-                            loading="lazy"
-                            draggable="false"
-                        />
-                    </Link>
+                    <img
+                        src={dataDeals.formats['image/jpeg']}
+                        alt={dataDeals.title || 'Book cover'}
+                        loading="lazy"
+                        draggable="false"
+                    />
                 </div>
 
                 <div className={cx('book-info')}>
