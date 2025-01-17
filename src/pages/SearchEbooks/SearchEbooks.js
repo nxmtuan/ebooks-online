@@ -123,7 +123,7 @@ function SearchEbooks() {
     };
 
     return (
-        <div className={cx('wrapper')}>
+        <section className={cx('wrapper')}>
             <div className={cx('row')}>
                 <div className={cx('main-region')}>
                     <div className={cx('container')}>
@@ -261,7 +261,7 @@ function SearchEbooks() {
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
     );
 }
 

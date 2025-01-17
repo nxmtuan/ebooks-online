@@ -53,7 +53,7 @@ function MiddleContent({ data1, data2, data3, data4 }) {
                         <div className={cx('block-content')}>
                             <div className={cx('list-content')} ref={rowRef2}>
                                 {data1 && data1.length > 0 ? (
-                                    data1.map((result) => <BookCard dataBook={result} />)
+                                    data1.map((result, index) => <BookCard key={index} dataBook={result} />)
                                 ) : (
                                     <p>No books available</p>
                                 )}
@@ -71,7 +71,7 @@ function MiddleContent({ data1, data2, data3, data4 }) {
                         <div className={cx('block-content')}>
                             <div className={cx('list-content')} ref={rowRef3}>
                                 {data1 && data1.length > 0 ? (
-                                    data1.map((result) => <BookCard dataBook={result} />)
+                                    data1.map((result, index) => <BookCard key={index} dataBook={result} />)
                                 ) : (
                                     <p>No books available</p>
                                 )}
@@ -91,7 +91,7 @@ function MiddleContent({ data1, data2, data3, data4 }) {
                         <div className={cx('block-content')}>
                             <div className={cx('list-content')}>
                                 {data2 && data2.length > 0 ? (
-                                    data2.map((result) => <BookCard dataBook={result} />)
+                                    data2.map((result, index) => <BookCard key={index} dataBook={result} />)
                                 ) : (
                                     <p>No eBook available</p>
                                 )}
@@ -109,7 +109,7 @@ function MiddleContent({ data1, data2, data3, data4 }) {
                         <div className={cx('block-content')}>
                             <div className={cx('list-content')}>
                                 {data3 && data3.length > 0 ? (
-                                    data3.map((result) => <BookCard dataBook={result} />)
+                                    data3.map((result, index) => <BookCard key={index} dataBook={result} />)
                                 ) : (
                                     <p>No books available</p>
                                 )}

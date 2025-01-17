@@ -40,7 +40,7 @@ function Home() {
     const ListBooksByPrice = listAll.filter((book) => book.price_before_sale > 0);
 
     return (
-        <div className={cx('wrapper')}>
+        <section className={cx('wrapper')}>
             {isLoading ? (
                 <Loading />
             ) : (
@@ -55,7 +55,7 @@ function Home() {
                     <BottomContent />
                 </>
             )}
-        </div>
+        </section>
     );
 }
 

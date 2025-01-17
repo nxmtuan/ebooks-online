@@ -45,7 +45,7 @@ function Header() {
     };
 
     return (
-        <div className={cx('wrapper')}>
+        <header className={cx('wrapper')}>
             <div className={cx('container')}>
                 <div className={cx('block-logo')}>
                     <Link className={cx('logo')}>
@@ -160,7 +160,7 @@ function Header() {
                     </div>
                 </HeadlessTippy>
             </div>
-        </div>
+        </header>
     );
 }
 
