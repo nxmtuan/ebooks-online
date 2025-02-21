@@ -1,9 +1,12 @@
 .wrapper {
+    position: fixed;
+    z-index: 20;
     display: flex;
     justify-content: center;
     background: var(--header-color);
     width: 100%;
     height: 93px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
     ul {
         padding: 0;
@@ -290,4 +293,10 @@ img {
 
 .arrow-icon {
     margin-left: 5px;
+}
+
+@media screen and (max-width: 600px) {
+    .wrapper {
+        position: static;
+    }
 }

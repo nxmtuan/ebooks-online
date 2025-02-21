@@ -250,6 +250,16 @@ input[type='checkbox']:checked + span::after {
     pointer-events: none;
 }
 
+@media (min-width: 769px) {
+    .toggleBtn {
+        display: none;
+    }
+
+    .closeBtn {
+        display: none;
+    }
+}
+
 @media screen and (max-width: 600px) {
     .container {
         .row {
@@ -286,5 +296,35 @@ input[type='checkbox']:checked + span::after {
     .pagination {
         flex-wrap: wrap;
         gap: 10px;
+    }
+
+    .child-of-left-region {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 999;
+        transition: transform 0.3s ease;
+        width: 100%;
+        transform: translateX(-100%);
+        padding: 50px 0;
+        height: 100vh;
+    }
+
+    .left-region-content {
+        overflow-y: hidden;
+        height: 100%;
+    }
+
+    .show {
+        transform: translateX(0);
+    }
+
+    .toggleBtn {
+        display: flex;
+    }
+
+    .closeBtn {
+        justify-content: space-between;
+        padding: 0 20px;
     }
 }

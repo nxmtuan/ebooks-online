@@ -1,14 +1,13 @@
 import classNames from 'classnames/bind';
 import styles from './SearchEbooks.module.scss';
 import { BookCard } from '~/components/BookCard';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import ReactPaginate from 'react-paginate';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowDown, faArrowUp, faFilter } from '@fortawesome/free-solid-svg-icons';
+import { faArrowDown, faArrowUp, faFilter, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import * as getEBookService from '~/services/getEBookService';
 import popularGenres from '~/utils/popularGenres';
-import { useMobileState } from '~/hooks/useMobileState';
 
 const cx = classNames.bind(styles);
 
@@ -24,7 +23,7 @@ function SearchEbooks() {
     const keyword = searchParams.get('keyword');
     const navigate = useNavigate();
     //const [visibleFilter, setVisibleFilter] = useState(false);
-    const [visibleFilter, toggleFilter] = useMobileState(false);
+    const filterRef = useRef(null);
 
     const [selectedGenres, setSelectedGenres] = useState([]);
     const [filteredBooks, setFilteredBooks] = useState([]);
@@ -75,6 +74,7 @@ function SearchEbooks() {
 
     const handlePageChange = (selectedPage) => {
         setCurrentPage(selectedPage.selected);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     const handleSortFormat = () => {
@@ -99,7 +99,7 @@ function SearchEbooks() {
                 selectedGenres.forEach((genre) => queryParams.append('genre', genre));
                 navigate(`?${queryParams.toString()}`);
                 setCurrentPage(0);
-                window.scrollTo(0, 0);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             } catch (error) {
                 console.error('Error fetching data: ', error);
             }
@@ -122,92 +122,105 @@ function SearchEbooks() {
         }
     };
 
+    const toggleAddClass = () => {
+        if (filterRef.current) {
+            filterRef.current.classList.add(styles.show);
+        }
+    };
+    const toggleRemoveClass = () => {
+        if (filterRef.current) {
+            filterRef.current.classList.remove(styles.show);
+        }
+    };
+
     return (
         <section className={cx('wrapper')}>
             <div className={cx('row')}>
                 <div className={cx('main-region')}>
                     <div className={cx('container')}>
                         <div className={cx('row')}>
-                            <div className={cx('sub-left-region')} onClick={toggleFilter}>
-                                FILTERS
-                                <FontAwesomeIcon icon={faFilter} />
-                            </div>
-                            {visibleFilter && (
-                                <div className={cx('left-region')}>
-                                    <div className={cx('child-of-left-region')}>
-                                        <div className={cx('left-region-content')}>
-                                            <div className={cx('sort-filter')}>
-                                                <h2>Sort by</h2>
-                                                <div className={cx('filter')}>
-                                                    <label className={cx('custom-radio')}>
-                                                        <input
-                                                            type="radio"
-                                                            value="A-Z"
-                                                            name="option"
-                                                            onChange={handleSortChange}
-                                                        />
-                                                        <span></span>
-                                                    </label>
-                                                    <p>A - Z</p>
-                                                </div>
-                                                <div className={cx('filter')}>
-                                                    <label className={cx('custom-radio')}>
-                                                        <input
-                                                            type="radio"
-                                                            value="Views"
-                                                            name="option"
-                                                            onChange={handleSortChange}
-                                                        />
-                                                        <span></span>
-                                                    </label>
-                                                    <p>Views</p>
-                                                </div>
-                                                <div className={cx('filter')}>
-                                                    <label className={cx('custom-radio')}>
-                                                        <input
-                                                            type="radio"
-                                                            value="Downloads"
-                                                            name="option"
-                                                            onChange={handleSortChange}
-                                                        />
-                                                        <span></span>
-                                                    </label>
-                                                    <p>Downloads</p>
-                                                </div>
+                            <div className={cx('left-region')}>
+                                <div ref={filterRef} className={cx('child-of-left-region')}>
+                                    <div className={cx('closeBtn', 'sub-left-region')} onClick={toggleRemoveClass}>
+                                        CLOSE FILTERS
+                                        <FontAwesomeIcon icon={faXmark} />
+                                    </div>
+                                    <div className={cx('left-region-content')}>
+                                        <div className={cx('sort-filter')}>
+                                            <h2>Sort by</h2>
+                                            <div className={cx('filter')}>
+                                                <label className={cx('custom-radio')}>
+                                                    <input
+                                                        type="radio"
+                                                        value="A-Z"
+                                                        name="option"
+                                                        onChange={handleSortChange}
+                                                    />
+                                                    <span></span>
+                                                </label>
+                                                <p>A - Z</p>
                                             </div>
+                                            <div className={cx('filter')}>
+                                                <label className={cx('custom-radio')}>
+                                                    <input
+                                                        type="radio"
+                                                        value="Views"
+                                                        name="option"
+                                                        onChange={handleSortChange}
+                                                    />
+                                                    <span></span>
+                                                </label>
+                                                <p>Views</p>
+                                            </div>
+                                            <div className={cx('filter')}>
+                                                <label className={cx('custom-radio')}>
+                                                    <input
+                                                        type="radio"
+                                                        value="Downloads"
+                                                        name="option"
+                                                        onChange={handleSortChange}
+                                                    />
+                                                    <span></span>
+                                                </label>
+                                                <p>Downloads</p>
+                                            </div>
+                                        </div>
 
-                                            <div className={cx('genre-filter')}>
-                                                <h2>Popular Genres</h2>
-                                                {popularGenres && popularGenres.length > 0 ? (
-                                                    popularGenres.map((result, index) => (
-                                                        <div className={cx('filter')} key={index}>
-                                                            <label className={cx('custom-checkbox')}>
-                                                                <input
-                                                                    type="checkbox"
-                                                                    onChange={() => handleCheckBoxChange(result)}
-                                                                    checked={selectedGenres.includes(result)}
-                                                                />
-                                                                <span></span>
-                                                            </label>
-                                                            <p>{result}</p>
-                                                        </div>
-                                                    ))
-                                                ) : (
-                                                    <p>No Genres Found!</p>
-                                                )}
-                                            </div>
+                                        <div className={cx('genre-filter')}>
+                                            <h2>Popular Genres</h2>
+                                            {popularGenres && popularGenres.length > 0 ? (
+                                                popularGenres.map((result, index) => (
+                                                    <div className={cx('filter')} key={index}>
+                                                        <label className={cx('custom-checkbox')}>
+                                                            <input
+                                                                type="checkbox"
+                                                                onChange={() => handleCheckBoxChange(result)}
+                                                                checked={selectedGenres.includes(result)}
+                                                            />
+                                                            <span></span>
+                                                        </label>
+                                                        <p>{result}</p>
+                                                    </div>
+                                                ))
+                                            ) : (
+                                                <p>No Genres Found!</p>
+                                            )}
+                                        </div>
 
-                                            <div className={cx('btn-region')}>
-                                                <button className={cx('apply-btn')} onClick={handleApplyFilter}>
-                                                    Apply
-                                                </button>
-                                            </div>
+                                        <div className={cx('btn-region')}>
+                                            <button className={cx('apply-btn')} onClick={handleApplyFilter}>
+                                                Apply
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
-                            )}
+                            </div>
 
                             <div className={cx('right-region')}>
+                                <div className={cx('toggleBtn', 'sub-left-region')} onClick={toggleAddClass}>
+                                    FILTERS
+                                    <FontAwesomeIcon icon={faFilter} />
+                                </div>
                                 <div className={cx('title')}>
                                     Search Results
                                     <p>{keyword ? `Result for: "${keyword}"` : 'Genres filter'}</p>

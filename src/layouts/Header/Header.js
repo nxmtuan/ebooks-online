@@ -4,7 +4,7 @@ import HeadlessTippy from '@tippyjs/react/headless';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faCaretUp, faSearch } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import * as getEBookService from '~/services/getEBookService';
 import popularGenres from '~/utils/popularGenres';
 
@@ -44,8 +44,27 @@ function Header() {
         }
     };
 
+    const [isVisible, setIsVisible] = useState(true);
+    const [lastScrollY, setLastScrollY] = useState(0);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY > lastScrollY) {
+                setIsVisible(false); // Cuộn xuống => Ẩn header
+            } else {
+                setIsVisible(true); // Cuộn lên => Hiện header
+            }
+            setLastScrollY(window.scrollY);
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [lastScrollY]);
+
     return (
-        <header className={cx('wrapper')}>
+        <header className={cx('wrapper', { hiddenHeader: !isVisible })}>
             <div className={cx('container')}>
                 <div className={cx('block-logo')}>
                     <Link className={cx('logo')}>
