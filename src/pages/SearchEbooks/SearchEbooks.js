@@ -103,7 +103,7 @@ function SearchEbooks() {
                     selectedGenres.forEach((genre) => queryParams.append('genre', genre));
                     navigate(`?${queryParams.toString()}`);
                     setCurrentPage(0);
-                    setIsSearching(true);
+                    setIsSearching(false);
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                     filterRef.current.classList.remove(styles.show);
                 } else {
