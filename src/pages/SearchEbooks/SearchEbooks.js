@@ -8,6 +8,7 @@ import { faArrowDown, faArrowUp, faFilter, faXmark } from '@fortawesome/free-sol
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import * as getEBookService from '~/services/getEBookService';
 import popularGenres from '~/utils/popularGenres';
+import Searching from '~/components/Searching';
 
 const cx = classNames.bind(styles);
 
@@ -29,6 +30,7 @@ function SearchEbooks() {
     const [filteredBooks, setFilteredBooks] = useState([]);
     // eslint-disable-next-line no-unused-vars
     const [sortOption, setSortOption] = useState('');
+    const [isSearching, setIsSearching] = useState(true);
 
     const [sortFormat, setSortFormat] = useState(false);
     const [currentPageData, setCurrentPageData] = useState([]);
@@ -89,17 +91,24 @@ function SearchEbooks() {
 
     const handleApplyFilter = useCallback(
         async (e) => {
+            setIsSearching(true);
             try {
-                e.preventDefault();
+                if (filterRef.current) {
+                    e.preventDefault();
 
-                const result = await getEBookService.filterGenres(selectedGenres);
-                setFilteredBooks(result);
+                    const result = await getEBookService.filterGenres(selectedGenres);
+                    setFilteredBooks(result);
 
-                const queryParams = new URLSearchParams();
-                selectedGenres.forEach((genre) => queryParams.append('genre', genre));
-                navigate(`?${queryParams.toString()}`);
-                setCurrentPage(0);
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                    const queryParams = new URLSearchParams();
+                    selectedGenres.forEach((genre) => queryParams.append('genre', genre));
+                    navigate(`?${queryParams.toString()}`);
+                    setCurrentPage(0);
+                    setIsSearching(true);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    filterRef.current.classList.remove(styles.show);
+                } else {
+                    console.log('Filter element not found!');
+                }
             } catch (error) {
                 console.error('Error fetching data: ', error);
             }
@@ -232,24 +241,28 @@ function SearchEbooks() {
                                         icon={sortFormat ? faArrowUp : faArrowDown}
                                     />
                                 </div>
-                                <div className={cx('result-region')}>
-                                    <div className={cx('block')}>
-                                        <div className={cx('list')}>
-                                            {currentPageData && currentPageData.length > 0 ? (
-                                                currentPageData.map((result) => (
-                                                    <BookCard
-                                                        key={result.id}
-                                                        dataBook={result}
-                                                        itemsCardStyle={{ width: '165px', paddingBottom: '30px' }}
-                                                        bookImageStyle={{ height: '247px' }}
-                                                    />
-                                                ))
-                                            ) : (
-                                                <p>No books available</p>
-                                            )}
+                                {isSearching ? (
+                                    <Searching />
+                                ) : (
+                                    <div className={cx('result-region')}>
+                                        <div className={cx('block')}>
+                                            <div className={cx('list')}>
+                                                {currentPageData && currentPageData.length > 0 ? (
+                                                    currentPageData.map((result) => (
+                                                        <BookCard
+                                                            key={result.id}
+                                                            dataBook={result}
+                                                            itemsCardStyle={{ width: '165px', paddingBottom: '30px' }}
+                                                            bookImageStyle={{ height: '247px' }}
+                                                        />
+                                                    ))
+                                                ) : (
+                                                    <p>No books available</p>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                )}
 
                                 <ReactPaginate
                                     previousLabel={'< Previous'}
