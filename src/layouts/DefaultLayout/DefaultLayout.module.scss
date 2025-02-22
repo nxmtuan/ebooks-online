@@ -6,12 +6,13 @@
     margin: 0;
     overflow-x: hidden;
     user-select: none;
+    background-color: #f6f5f2;
 }
 
 .container {
     font-size: 14px;
     line-height: 1.4rem;
-    background-color: #fbfbfb;
+    background-color: #f6f5f2;
     margin-top: 100px;
 
     @media (min-width: 1200px) {

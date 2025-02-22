@@ -48,7 +48,7 @@ function Header() {
         <header className={cx('wrapper')}>
             <div className={cx('container')}>
                 <div className={cx('block-logo')}>
-                    <Link className={cx('logo')}>
+                    <Link to={'/'} className={cx('logo')}>
                         <img src="https://manybooks.net/themes/custom/mnybks/logo.svg" alt="Logo" />
                     </Link>
                 </div>
