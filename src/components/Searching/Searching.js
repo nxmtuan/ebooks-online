@@ -13,7 +13,7 @@ function Searching() {
                 <div className={cx('circle')}></div>
                 <div className={cx('circle')}></div>
             </div>
-            <div className={cx('searching-title')}>Searching inprogress...</div>
+            <div className={cx('searching-title')}>Working...</div>
         </div>
     );
 }

@@ -30,7 +30,7 @@ function SearchEbooks() {
     const [filteredBooks, setFilteredBooks] = useState([]);
     // eslint-disable-next-line no-unused-vars
     const [sortOption, setSortOption] = useState('');
-    const [isSearching, setIsSearching] = useState(true);
+    const [isSearching, setIsSearching] = useState(false);
 
     const [sortFormat, setSortFormat] = useState(false);
     const [currentPageData, setCurrentPageData] = useState([]);
@@ -103,8 +103,8 @@ function SearchEbooks() {
                     selectedGenres.forEach((genre) => queryParams.append('genre', genre));
                     navigate(`?${queryParams.toString()}`);
                     setCurrentPage(0);
-                    setIsSearching(false);
                     window.scrollTo({ top: 0, behavior: 'smooth' });
+                    setIsSearching(false);
                     filterRef.current.classList.remove(styles.show);
                 } else {
                     console.log('Filter element not found!');
